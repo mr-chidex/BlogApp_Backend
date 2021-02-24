@@ -27,6 +27,7 @@ POST /api/user/signin
 
 ```sh
 setting pagination from the server post
+GET /api/posts?page=<page no>
 ```
 
 **socket.io**
