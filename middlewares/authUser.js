@@ -4,10 +4,10 @@ const User = require("../models/user");
 exports.authUser = async (req, res, next) => {
   try {
     if (!req.headers.authorization)
-      return res.status(401).json({ message: "Not Unauthorized" });
+      return res.status(401).json({ message: "Unauthorized" });
 
     if (!req.headers.authorization.startsWith("Bearer"))
-      return res.status(401).json({ message: "Not Unauthorized" });
+      return res.status(401).json({ message: "Unauthorized" });
 
     const token = req.headers.authorization.split(" ")[1];
 
