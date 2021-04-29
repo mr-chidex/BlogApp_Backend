@@ -18,7 +18,7 @@ const postRouter = require("./routes/posts");
 const error = require("./controllers/error");
 const userRouter = require("./routes/user");
 
-app.use("/", (req, res) => {
+app.get("/", (req, res) => {
   return res.json({
     message: "API by mr-chidex",
     github: "https://github.com/mr-chidex",
@@ -27,7 +27,6 @@ app.use("/", (req, res) => {
 app.use("/api/posts", postRouter);
 app.use("/api/user", userRouter);
 app.use(error);
-dfev;
 
 mongoose
   .connect(process.env.PROD_TEST_DB, {
