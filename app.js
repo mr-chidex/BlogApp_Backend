@@ -18,7 +18,7 @@ const postRouter = require("./routes/posts");
 const error = require("./controllers/error");
 const userRouter = require("./routes/user");
 
-app.get("/", (req, res) => {
+app.use("/", (req, res) => {
   return res.json({
     message: "API by mr-chidex",
     github: "https://github.com/mr-chidex",
