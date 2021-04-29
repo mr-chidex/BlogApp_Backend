@@ -20,9 +20,8 @@ const userRouter = require("./routes/user");
 
 app.get("/", (req, res) => {
   return res.json({
-    message: "API by chidex",
-    name: "mr-chidex",
-    github: "https://github.com",
+    message: "API by mr-chidex",
+    github: "https://github.com/mr-chidex",
   });
 });
 app.use("/api/posts", postRouter);
