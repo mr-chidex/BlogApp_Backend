@@ -18,9 +18,17 @@ const postRouter = require("./routes/posts");
 const error = require("./controllers/error");
 const userRouter = require("./routes/user");
 
+app.get("/", (req, res) => {
+  return res.json({
+    message: "API by chidex",
+    name: "mr-chidex",
+    github: "https://github.com",
+  });
+});
 app.use("/api/posts", postRouter);
 app.use("/api/user", userRouter);
 app.use(error);
+dfev;
 
 mongoose
   .connect(process.env.PROD_TEST_DB, {
