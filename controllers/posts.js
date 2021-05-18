@@ -10,7 +10,7 @@ const io = require("../socket");
 //@access   Public
 const getAllPosts = async (req, res, next) => {
   const currentPage = req.query.page || 1;
-  const perPage = 3;
+  const perPage = 5;
   const totalPost = await Posts.find().countDocuments();
   const posts = await Posts.find()
     .populate("author", "name -_id")
