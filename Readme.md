@@ -1,6 +1,6 @@
 # MERN Blog App
 
-A mern stack blog application, designed with Node Js, Epress JS, React JS, Redux, Mongo DB, Socket.io and bootstrap. The frontend is being hosted on Netlify and the backend on heroku.
+A mern stack blog application, designed with Node Js, Epress JS, React JS, Redux, Mongo DB, Socket.io and bootstrap. The frontend is being hosted on Vercel and the backend on heroku.
 
 # Frontend Codes
 
