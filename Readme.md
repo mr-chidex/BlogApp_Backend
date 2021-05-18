@@ -1,8 +1,22 @@
-- CRUD
+# MERN Blog App
+
+A mern stack blog application, designed with Node Js, Epress JS, React JS, Redux, Mongo DB, Socket.io and bootstrap. The frontend is being hosted on Netlify and the backend on heroku.
+
+# Frontend Codes
+
+See frontend codes - [Frontend-Code](https://github.com/mr-chidex/Node_Post_Frontend)
+
+## About
+
+Performs
+
+- CRUD operations
 - Authentication
 - Authorization
+- Validation
+- Pagination
 
-# Blog POST
+# End Points
 
 **POST**
 
@@ -13,8 +27,6 @@ POST /api/posts/:postId
 DELETE /api/posts/:postId
 PUT /api/posts/:postId
 ```
-
-# USER AUTH
 
 **USER**
 
@@ -27,7 +39,6 @@ POST /api/user/signin
 
 ```sh
 setting pagination from the server post
-GET /api/posts?page=<page no>
 ```
 
 **socket.io**
