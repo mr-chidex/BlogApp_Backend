@@ -2,9 +2,21 @@
 
 A mern stack blog application, designed with Node Js, Epress JS, React JS, Redux, Mongo DB, Socket.io and bootstrap. The frontend is being hosted on Vercel and the backend on heroku.
 
-# Frontend Codes
+#### Backend Dev Server
 
-See frontend codes - [Frontend-Code](https://github.com/mr-chidex/Node_Post_Frontend)
+```
+yarn dev
+```
+
+### Frontend
+
+- Redux
+- Authentication and Authentication.
+
+```
+cd frontend
+yarn start
+```
 
 ## About
 
@@ -15,6 +27,7 @@ Performs
 - Authorization
 - Validation
 - Pagination
+- Image upload
 
 # End Points
 
@@ -33,12 +46,6 @@ PUT /api/posts/:postId
 ```
 POST /api/user/signup
 POST /api/user/signin
-```
-
-**Pagination**
-
-```sh
-setting pagination from the server post
 ```
 
 **socket.io**
