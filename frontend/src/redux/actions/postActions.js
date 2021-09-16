@@ -101,32 +101,45 @@ export const addPostAction =
     }
   };
 
-export const editPostAction =
-  ({ title, image, content }) =>
-  async (dispatch) => {
-    try {
-      dispatch({ type: EDIT_POST_REQUEST });
+export const editPostAction = (post, postId) => async (dispatch) => {
+  try {
+    const { title, image, content } = post;
+    const formData = new FormData();
+    formData.append("title", title);
+    formData.append("content", content);
 
-      const { data } = await axios({
-        url: `${process.env.REACT_APP_BLOG_API}/api/users/signin`,
-        method: "POST",
-        data: { title, image, content },
-      });
-
-      dispatch({
-        type: EDIT_POST_SUCCESS,
-        payload: data,
-      });
-    } catch (error) {
-      dispatch({
-        type: EDIT_POST_FAILED,
-        payload:
-          error.response && error.response.data.message
-            ? error.response.data.message
-            : error.message,
-      });
+    if (image.current.files) {
+      formData.append("image", image.current.files[0]);
     }
-  };
+    dispatch({ type: EDIT_POST_REQUEST });
+
+    const { data } = await axios({
+      url: `${process.env.REACT_APP_BLOG_API}/api/posts/${postId}`,
+      method: "PUT",
+      data: formData,
+      headers: {
+        Authorization:
+          localStorage.getItem("NODE_USER") &&
+          JSON.parse(localStorage.getItem("NODE_USER")).token
+            ? JSON.parse(localStorage.getItem("NODE_USER")).token
+            : "",
+      },
+    });
+
+    dispatch({
+      type: EDIT_POST_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    dispatch({
+      type: EDIT_POST_FAILED,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    });
+  }
+};
 
 export const deletePostAction =
   ({ email, password }) =>

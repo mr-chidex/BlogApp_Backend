@@ -1,16 +1,19 @@
 const Posts = require("../models/posts");
 const User = require("../models/user");
 const mongoose = require("mongoose");
-const deleteImage = require("../handlers/deleteImage");
 const { validationResult } = require("express-validator");
+
+const cloudinary = require("../utils/cloudinary");
+const folderPath = require("../utils/folder");
 const io = require("../socket");
+const deleteImage = require("../handlers/deleteImage");
 
 //@desc     get all post
 //@Route    GET /api/posts/
 //@access   Public
 const getAllPosts = async (req, res, next) => {
   const currentPage = req.query.page || 1;
-  const perPage = 5;
+  const perPage = req.query.offset || 5;
   const totalPost = await Posts.find().countDocuments();
   const posts = await Posts.find()
     .populate("author", "name -_id")
@@ -36,20 +39,21 @@ const addNewPost = async (req, res, next) => {
 
   if (!req.file) return res.status(400).json({ message: "No image uploaded" });
 
+  const image = await cloudinary.v2.uploader.upload(req.file.path, {
+    folder: folderPath,
+  });
+
   const post = await new Posts({
     title,
     content,
-    image: req.file.path,
+    image: {
+      url: image.secure_url,
+      image_id: image.public_id?.split("/")[2],
+    },
     author: req.user,
   });
   await post.save();
-
   io.getIO().emit("posts", { action: "CREATE_POST", post: post });
-
-  const user = await User.findById(req.user._id);
-  user.posts = [...user.posts, post];
-  await user.save();
-
   res.status(201).json({ message: "post created successfully", post });
 };
 
@@ -87,8 +91,7 @@ const deletePost = async (req, res, next) => {
       .status(401)
       .json({ message: "Unauthorized access deleting file" });
 
-  deleteImage(post.image);
-
+  await cloudinary.v2.uploader.destroy(`${folderPath}/${post.image.image_Id}`);
   await Posts.deleteOne({ _id: postId });
 
   io.getIO().emit("posts", { action: "DELETE_POST", post: post });
@@ -128,9 +131,18 @@ const updatePost = async (req, res, next) => {
   post.title = title;
   post.content = content;
   if (req.file) {
-    //delete old image
-    deleteImage(post.image);
-    post.image = req.file.path;
+    await cloudinary.v2.uploader.destroy(
+      `${folderPath}/${post.image.image_Id}`
+    );
+
+    const image = await cloudinary.v2.uploader.upload(req.file.path, {
+      folder: folderPath,
+    });
+
+    post.image = {
+      url: image.secure_url,
+      image_id: image.public_id?.split("/")[2],
+    };
   }
 
   await post.save();

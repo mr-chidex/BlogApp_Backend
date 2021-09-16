@@ -1,19 +1,28 @@
 import React, { useEffect, useState, useRef } from "react";
 import axios from "axios";
 import { useSelector, useDispatch } from "react-redux";
+import { useParams } from "react-router-dom";
 
 import Message from "../components/Message";
 import { generateBase64FromImage } from "../utils/image";
+import {
+  addPostAction,
+  editPostAction,
+  getPostAction,
+} from "../redux/actions/postActions";
 
 const EditPost = ({ location, match, history }) => {
-  const [message, setMessage] = useState("");
-  const [error, setError] = useState(false);
-  const [success, setSuccess] = useState(false);
+  const [alerts, setAlerts] = useState(false);
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [edit, setEdit] = useState(false);
   const [imagePreview, setImagePreview] = useState("");
+  const dispatch = useDispatch();
+  const params = useParams();
 
+  const { posts, loading, post, error, message, success } = useSelector(
+    (state) => state.blogPost
+  );
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
@@ -22,62 +31,34 @@ const EditPost = ({ location, match, history }) => {
 
   useEffect(() => {
     if (editSearch === "true") {
-      const fetchSinglePost = async (postId) => {
-        try {
-          const { data } = await axios.get(
-            `${process.env.REACT_APP_BLOG_API}/api/posts/${match.params.postId}`
-          );
-          setEdit(true);
-          setTitle(data.post.title);
-          setContent(data.post.content);
-          setEdit(true);
-        } catch (error) {
-          setMessage(error.response.data.message);
-          setError(true);
-        }
-      };
+      dispatch(getPostAction(params.postId));
+      setAlerts(true);
+      // const fetchSinglePost = async (postId) => {
+      //   try {
+      //     const { data } = await axios.get(
+      //       `${process.env.REACT_APP_BLOG_API}/api/posts/${match.params.postId}`
+      //     );
+      //     setEdit(true);
+      //     setTitle(data.post.title);
+      //     setContent(data.post.content);
+      //     setEdit(true);
+      //   } catch (error) {
+      //     // setMessage(error.response.data.message);
+      //     // setError(true);
+      //   }
+      // };
 
-      fetchSinglePost();
+      // fetchSinglePost();
     }
-  }, [match, editSearch]);
+  }, [params, editSearch, dispatch]);
 
   const image = useRef("");
 
   const addNewPostHandler = async (e) => {
     e.preventDefault();
-    const formaData = new FormData();
-    formaData.append("title", title);
-    formaData.append("content", content);
-    if (!image.current.files) {
-      setError(true);
-      setMessage("please upload an image");
-      return;
-    }
 
-    formaData.append("image", image.current.files[0]);
-
-    try {
-      await axios({
-        url: `${process.env.REACT_APP_BLOG_API}/api/posts`,
-        method: "POST",
-        data: formaData,
-        headers: {
-          Authorization:
-            localStorage.getItem("NODE_USER") &&
-            JSON.parse(localStorage.getItem("NODE_USER")).token
-              ? JSON.parse(localStorage.getItem("NODE_USER")).token
-              : "",
-        },
-      });
-
-      setMessage("Post added successfully");
-      setSuccess(true);
-      setTitle("");
-      setContent("");
-    } catch (error) {
-      setMessage(error.response ? error.response.data.message : error.message);
-      setError(true);
-    }
+    dispatch(addPostAction({ title, image, content }));
+    setAlerts(true);
   };
 
   const editPost = async (e) => {
@@ -85,42 +66,14 @@ const EditPost = ({ location, match, history }) => {
     if (!edit) {
       return;
     }
-    const formaData = new FormData();
-    formaData.append("title", title);
-    formaData.append("content", content);
-    if (image.current.files) {
-      formaData.append("image", image.current.files[0]);
-    }
-
-    try {
-      await axios({
-        url: `${process.env.REACT_APP_BLOG_API}/api/posts/${match.params.postId}`,
-        method: "PUT",
-        data: formaData,
-        headers: {
-          Authorization:
-            localStorage.getItem("NODE_USER") &&
-            JSON.parse(localStorage.getItem("NODE_USER")).token
-              ? JSON.parse(localStorage.getItem("NODE_USER")).token
-              : "",
-        },
-      });
-      setMessage("Post updated successfully");
-      setSuccess(true);
-    } catch (error) {
-      setMessage(error.response.data.message);
-      setError(true);
-    }
+    const post = { title, image, content };
+    dispatch(editPostAction(post, params.postId));
+    setAlerts(true);
   };
 
   const imageChangeHandler = async () => {
     const imagepreview = await generateBase64FromImage(image.current.files[0]);
     setImagePreview(imagepreview);
-  };
-
-  const removeMessage = () => {
-    setError(false);
-    setSuccess(false);
   };
 
   return (
@@ -131,16 +84,8 @@ const EditPost = ({ location, match, history }) => {
         </h1>
 
         <div className="w-75 mx-auto">
-          {success && (
-            <Message status="success" click={removeMessage}>
-              {message}
-            </Message>
-          )}
-          {error && (
-            <Message status="error" click={removeMessage}>
-              {message}
-            </Message>
-          )}
+          {alerts && success && <Message status="success">{message}</Message>}
+          {alerts && error && <Message status="error">{message}</Message>}
 
           <div className="modal-body">
             <form>

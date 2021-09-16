@@ -32,6 +32,7 @@ export const postReducer = (state = initialState, action) => {
       return {
         posts: action.payload,
         loadng: false,
+        success: true,
       };
     case FETCH_POSTS_FAILED:
       return {
@@ -48,6 +49,7 @@ export const postReducer = (state = initialState, action) => {
       return {
         post: action.payload,
         loadng: false,
+        success: true,
       };
     case FETCH_POST_FAILED:
       return {
@@ -62,8 +64,10 @@ export const postReducer = (state = initialState, action) => {
       };
     case ADD_POST_SUCCESS:
       return {
-        post: action.payload,
+        post: action.payload.post,
         loadng: false,
+        success: true,
+        message: action.payload.message,
       };
     case ADD_POST_FAILED:
       return {
@@ -80,6 +84,7 @@ export const postReducer = (state = initialState, action) => {
       return {
         post: action.payload,
         loadng: false,
+        success: true,
       };
     case EDIT_POST_FAILED:
       return {
@@ -96,6 +101,7 @@ export const postReducer = (state = initialState, action) => {
       return {
         post: action.payload,
         loadng: false,
+        success: true,
       };
     case DELETE_POST_FAILED:
       return {

@@ -1,5 +1,5 @@
 const multer = require("multer");
-const { v4 } = require("uuid");
+// const { v4 } = require("uuid");
 
 const imageFilter = (req, file, cb) => {
   try {
@@ -18,17 +18,17 @@ const imageFilter = (req, file, cb) => {
   }
 };
 
-const imageStorage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, "images");
-  },
-  filename: (req, file, cb) => {
-    cb(null, v4() + "-" + file.originalname);
-  },
-});
+// const imageStorage = multer.diskStorage({
+//   destination: (req, file, cb) => {
+//     cb(null, "images");
+//   },
+//   filename: (req, file, cb) => {
+//     cb(null, v4() + "-" + file.originalname);
+//   },
+// });
 
 module.exports = multer({
-  storage: imageStorage,
+  storage: multer.diskStorage({}),
   fileFilter: imageFilter,
   limits: { fileSize: 500000 },
 });
