@@ -28,7 +28,8 @@ export const userReducer = (state = initialState, action) => {
     case USER_LOGIN_FAILED:
       return {
         loading: false,
-        error: action.payload,
+        message: action.payload,
+        error: true,
       };
     case USER_SIGNUP_REQUEST:
       return { loading: true };

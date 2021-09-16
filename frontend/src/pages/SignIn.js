@@ -1,16 +1,21 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import Message from "../components/Message";
+import { useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
+
+import Message from "../components/Message";
 import { userLoginAction } from "../redux/actions/userActions";
 
 const SignIn = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState(false);
+  const [alerts, setAlerts] = useState(false);
+  const history = useHistory();
 
   const dispatch = useDispatch();
-  const { user, error: errorLogin } = useSelector((state) => state.userLogin);
+  const { user, message, error, loading } = useSelector(
+    (state) => state.userLogin
+  );
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -19,12 +24,14 @@ const SignIn = () => {
   const submitSigninHandler = async (e) => {
     e.preventDefault();
     dispatch(userLoginAction({ email, password }));
-    setError(true);
+    setAlerts(true);
   };
 
-  const removeMessage = () => {
-    setError(false);
-  };
+  useEffect(() => {
+    if (user?._id) {
+      history.push("/join");
+    }
+  }, [history, user]);
 
   return (
     <main className="container-lg main">
@@ -36,11 +43,7 @@ const SignIn = () => {
             <strong>1234</strong>
           </div>
           {user && <Message status="success">signed in successfully</Message>}
-          {errorLogin && error && (
-            <Message status="error" click={removeMessage}>
-              {errorLogin}
-            </Message>
-          )}
+          {alerts && error && <Message status="error">{message}</Message>}
           <form>
             <div className="form-group">
               <label htmlFor="email">Email:</label>
@@ -70,13 +73,24 @@ const SignIn = () => {
             <p>
               Don't have an accout? <Link to="signup">Signup</Link>{" "}
             </p>
-            <button
-              type="submit"
-              onClick={submitSigninHandler}
-              className="btn btn-primary"
-            >
-              Sign In
-            </button>
+            {loading ? (
+              <button
+                type="submit"
+                onClick={submitSigninHandler}
+                className="btn btn-primary"
+                disabled
+              >
+                Signing In...
+              </button>
+            ) : (
+              <button
+                type="submit"
+                onClick={submitSigninHandler}
+                className="btn btn-primary"
+              >
+                Sign In
+              </button>
+            )}
           </form>
         </div>
       </div>
