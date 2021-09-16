@@ -1,6 +1,5 @@
 const express = require("express");
 const cors = require("cors");
-const bodyParser = require("body-parser");
 const morgan = require("morgan");
 const app = express();
 const path = require("path");
@@ -8,8 +7,8 @@ const mongoose = require("mongoose");
 require("dotenv").config();
 const User = require("./models/user");
 
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 app.use(morgan("dev"));
 app.use("/images", express.static(path.join(__dirname, "images")));
@@ -35,6 +34,7 @@ mongoose
   })
   .then(async () => {
     console.log("db connected...");
+
     const server = app.listen(process.env.PORT || 8080, () =>
       console.log("server running...")
     );
