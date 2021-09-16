@@ -1,5 +1,4 @@
 import React, { useEffect, useState, useRef } from "react";
-import axios from "axios";
 import { useSelector, useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
 
@@ -11,7 +10,7 @@ import {
   getPostAction,
 } from "../redux/actions/postActions";
 
-const EditPost = ({ location, match, history }) => {
+const EditPost = ({ location }) => {
   const [alerts, setAlerts] = useState(false);
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
@@ -20,35 +19,26 @@ const EditPost = ({ location, match, history }) => {
   const dispatch = useDispatch();
   const params = useParams();
 
-  const { posts, loading, post, error, message, success } = useSelector(
+  const { loading, post, error, message, success } = useSelector(
     (state) => state.blogPost
   );
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
+  useEffect(() => {
+    if (post) {
+      setTitle(post?.title);
+      setContent(post?.content);
+    }
+  }, [post]);
+
   const editSearch = location.search ? location.search.split("=")[1] : "";
 
   useEffect(() => {
     if (editSearch === "true") {
+      setEdit(true);
       dispatch(getPostAction(params.postId));
-      setAlerts(true);
-      // const fetchSinglePost = async (postId) => {
-      //   try {
-      //     const { data } = await axios.get(
-      //       `${process.env.REACT_APP_BLOG_API}/api/posts/${match.params.postId}`
-      //     );
-      //     setEdit(true);
-      //     setTitle(data.post.title);
-      //     setContent(data.post.content);
-      //     setEdit(true);
-      //   } catch (error) {
-      //     // setMessage(error.response.data.message);
-      //     // setError(true);
-      //   }
-      // };
-
-      // fetchSinglePost();
     }
   }, [params, editSearch, dispatch]);
 
@@ -115,7 +105,11 @@ const EditPost = ({ location, match, history }) => {
                 />
               </div>
               <div className=" form-group w-25">
-                <img src={imagePreview} className="img-fluid w-50" alt="" />
+                <img
+                  src={post?.image?.url || imagePreview}
+                  className="img-fluid w-50"
+                  alt=""
+                />
               </div>
               <div className="form-group">
                 <label htmlFor="content">CONTENT:</label>
@@ -133,12 +127,32 @@ const EditPost = ({ location, match, history }) => {
                 />
               </div>
               {edit ? (
+                loading ? (
+                  <button
+                    type="submit"
+                    onClick={editPost}
+                    className="btn btn-primary"
+                    disabled
+                  >
+                    Updating Post...
+                  </button>
+                ) : (
+                  <button
+                    type="submit"
+                    onClick={editPost}
+                    className="btn btn-primary"
+                  >
+                    Update Post
+                  </button>
+                )
+              ) : loading ? (
                 <button
                   type="submit"
-                  onClick={editPost}
+                  onClick={addNewPostHandler}
                   className="btn btn-primary"
+                  disabled
                 >
-                  Update Post
+                  Submitting...
                 </button>
               ) : (
                 <button

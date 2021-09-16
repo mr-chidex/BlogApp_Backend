@@ -1,47 +1,44 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import { useDispatch, useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
 
-const SinglePost = ({ match }) => {
-  const [post, setPost] = useState({});
-  const [isLoading, setIsLoading] = useState(false);
+import Message from "../components/Message";
+import { getPostAction } from "../redux/actions/postActions";
+
+const SinglePost = () => {
+  const [alerts, setAlerts] = useState(false);
+  const params = useParams();
+  const dispatch = useDispatch();
+
+  const { loading, post, error, message } = useSelector(
+    (state) => state.blogPost
+  );
 
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
   useEffect(() => {
-    const fetchSinglePost = async () => {
-      try {
-        setIsLoading(true);
-        const { data } = await axios.get(
-          `${process.env.REACT_APP_BLOG_API}/api/posts/${match.params.postId}`
-        );
-        setPost(data.post);
-        setIsLoading(false);
-      } catch (error) {
-        setIsLoading(false);
-        console.log(error);
-      }
-    };
-
-    fetchSinglePost();
-  }, [match]);
+    dispatch(getPostAction(params.postId));
+    setAlerts(true);
+  }, [params, dispatch]);
 
   return (
     <div className="text-center " style={{ marginTop: "6rem" }}>
-      {isLoading ? (
+      {alerts && error && <Message status="error">{message}</Message>}
+      {loading ? (
         <div className="defaultImage"></div>
       ) : (
         <main className="container-lg main mt-5">
-          <h1 className="my-3"> {post.title}</h1>
+          <h1 className="my-3"> {post?.title}</h1>
           <div className="w-75 mx-auto">
             <img
-              src={process.env.REACT_APP_BASEURL + "" + post.image}
-              alt={post.title}
+              src={post?.image?.url}
+              alt={post?.title}
               className="my-2 img-fluid"
             />
           </div>
-          <p>{post.content}</p>
+          <p>{post?.content}</p>
         </main>
       )}
     </div>

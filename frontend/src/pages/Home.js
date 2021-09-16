@@ -1,150 +1,42 @@
-import React, { useEffect, useState, useCallback } from "react";
-import axios from "axios";
-import { useSelector } from "react-redux";
-import openSocket from "socket.io-client";
+import React, { useEffect, useState } from "react";
+// import openSocket from "socket.io-client";
+import { useDispatch, useSelector } from "react-redux";
+
+import { getPostsAction, deletePostAction } from "../redux/actions/postActions";
 import Message from "../components/Message";
 
 const Home = ({ history }) => {
-  const [message, setMessage] = useState(null);
-  const [error, setError] = useState(false);
-  const [success, setSuccess] = useState(false);
-  const [posts, setPosts] = useState([]);
   const [page, setPage] = useState(1);
-  const [lastPage, setLastPage] = useState(1);
-  const [isLoading, setIsLoading] = useState(false);
+  const [alerts, setAlerts] = useState(false);
+
   const defaultPosts = 5;
+  const dispatch = useDispatch();
 
   const { user } = useSelector((state) => state.userLogin);
+  const { posts, loading, totalPost, error, message } = useSelector(
+    (state) => state.blogPost
+  );
+
+  const lastPage = totalPost && Math.ceil(totalPost / 5);
 
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [page]);
 
-  const fetchPosts = useCallback(async () => {
-    try {
-      setIsLoading(true);
-      const { data } = await axios.get(
-        `${process.env.REACT_APP_POST_API}?page=${page}`
-      );
-      setIsLoading(false);
-      setPosts(data?.posts);
-      const lastPage = Math.ceil(data?.totalPost / 5);
-      // setLastPage(lastPage);
-    } catch (error) {
-      setError(true);
-      setMessage(
-        error.response && error.response?.data?.message
-          ? error.response.data.message
-          : error.message
-      );
-      setIsLoading(false);
-    }
-  }, [page]);
-
-  const addIO = useCallback(
-    (post) => {
-      setPosts((prevPost) => {
-        const isExist = prevPost.find((p) => p._id === post._id);
-        if (isExist) {
-          return prevPost;
-        }
-        const updatedPosts = [...prevPost];
-        if (page === 1) {
-          updatedPosts.unshift(post);
-          // updatedPosts.pop();
-        }
-
-        return updatedPosts;
-      });
-    },
-    [page]
-  );
-
-  const updateIO = useCallback((post) => {
-    setPosts((prevPost) => {
-      const updatedPosts = [...prevPost];
-      const updatedPostIndex = updatedPosts.findIndex(
-        (p) => p._id === post._id
-      );
-      if (updatedPostIndex > -1) {
-        updatedPosts[updatedPostIndex] = post;
-      }
-
-      return updatedPosts;
-    });
-  }, []);
-
-  const deleteIO = useCallback(
-    (post) => {
-      if (posts.length < 3) {
-        fetchPosts();
-      }
-      setPosts((prevPost) => {
-        const updatedPosts = [...prevPost];
-        const newPost = updatedPosts.filter((p) => p._id !== post._id);
-
-        return newPost;
-      });
-    },
-    [fetchPosts, posts?.length]
-  );
-
   useEffect(() => {
-    fetchPosts();
-  }, [fetchPosts]);
-
-  useEffect(() => {
-    const socket = openSocket(process.env.REACT_APP_BASEURL);
-
-    socket.on("posts", (data) => {
-      switch (data.action) {
-        case "CREATE_POST":
-          addIO(data.post);
-          break;
-        case "UPDATE_POST":
-          updateIO(data.post);
-          break;
-        case "DELETE_POST":
-          deleteIO(data.post);
-          break;
-        default:
-          return;
-      }
-    });
-  }, [addIO, updateIO, deleteIO]);
+    dispatch(getPostsAction(page));
+    setAlerts(true);
+  }, [page, dispatch]);
 
   const deletePost = async (postId) => {
-    try {
-      setIsLoading(true);
-      const { data } = await axios({
-        url: `${process.env.REACT_APP_POST_API}/${postId}`,
-        method: "DELETE",
-        headers: {
-          Authorization:
-            localStorage.getItem("NODE_USER") &&
-            JSON.parse(localStorage.getItem("NODE_USER")).token
-              ? JSON.parse(localStorage.getItem("NODE_USER")).token
-              : "",
-        },
-      });
-      setSuccess(true);
-      setMessage(data.message);
-      setIsLoading(false);
-    } catch (error) {
-      setMessage(error.response.data.message);
-      setError(true);
-      setIsLoading(false);
-    }
+    dispatch(deletePostAction(postId));
+    setAlerts(true);
   };
 
   const paginationHandler = (index) => {
     setPage(index + 1);
   };
 
-  const removeMessage = () => {
-    setError(false);
-    setSuccess(false);
-  };
   return (
     <>
       <div className="hero-container mb-3">
@@ -164,7 +56,7 @@ const Home = ({ history }) => {
           </button>
         )}
 
-        {isLoading && (
+        {loading && (
           <div className="default">
             {[...Array(defaultPosts)].map((post, index) => (
               <div className="defaultPost" key={index}></div>
@@ -172,17 +64,7 @@ const Home = ({ history }) => {
           </div>
         )}
 
-        {success && (
-          <Message status="success" click={removeMessage}>
-            {message}
-          </Message>
-        )}
-
-        {/* {error && (
-          <Message status="error" click={removeMessage}>
-            {message}
-          </Message>
-        )} */}
+        {alerts && error && <Message status="error">{message}</Message>}
 
         {posts?.length > 0
           ? posts.map((post) => (
@@ -195,7 +77,7 @@ const Home = ({ history }) => {
                   <h1>{post.title}</h1>
                   <div className="w-25 image-container  ">
                     <img
-                      src={process.env.REACT_APP_BASEURL + "" + post.image}
+                      src={post.image?.url}
                       alt={post.title}
                       className="rounded img-fluid mx-auto d-inline-block"
                     />
@@ -210,7 +92,7 @@ const Home = ({ history }) => {
                   >
                     Read More...
                   </button>
-                  {user && user.name && (
+                  {user?.name && (
                     <>
                       <button
                         className="btn btn-secondary btn-sm px-3 mx-2"
@@ -231,7 +113,7 @@ const Home = ({ history }) => {
                 </div>
               </div>
             ))
-          : !isLoading && <h1>No available posts</h1>}
+          : !loading && <h1>No available posts</h1>}
 
         <nav aria-label="Page navigation example">
           <ul className="pagination  justify-content-center">

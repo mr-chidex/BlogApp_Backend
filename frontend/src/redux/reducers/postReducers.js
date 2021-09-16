@@ -30,9 +30,10 @@ export const postReducer = (state = initialState, action) => {
       };
     case FETCH_POSTS_SUCCESS:
       return {
-        posts: action.payload,
+        posts: action.payload.posts,
         loadng: false,
         success: true,
+        totalPost: action.payload.totalPost,
       };
     case FETCH_POSTS_FAILED:
       return {
@@ -46,8 +47,9 @@ export const postReducer = (state = initialState, action) => {
         loading: true,
       };
     case FETCH_POST_SUCCESS:
+      console.log("s", action.payload);
       return {
-        post: action.payload,
+        post: action.payload.post,
         loadng: false,
         success: true,
       };
@@ -82,9 +84,10 @@ export const postReducer = (state = initialState, action) => {
       };
     case EDIT_POST_SUCCESS:
       return {
-        post: action.payload,
+        post: action.payload.post,
         loadng: false,
         success: true,
+        message: action.payload.message,
       };
     case EDIT_POST_FAILED:
       return {

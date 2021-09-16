@@ -17,12 +17,12 @@ import {
 } from "../constants/postConstants";
 import axios from "axios";
 
-export const getPostsAction = () => async (dispatch) => {
+export const getPostsAction = (page) => async (dispatch) => {
   try {
     dispatch({ type: FETCH_POSTS_REQUEST });
 
     const { data } = await axios({
-      url: `${process.env.REACT_APP_BLOG_API}/api/posts`,
+      url: `${process.env.REACT_APP_BLOG_API}/api/posts?page=${page}`,
     });
 
     dispatch({
@@ -43,11 +43,12 @@ export const getPostsAction = () => async (dispatch) => {
 export const getPostAction = (id) => async (dispatch) => {
   try {
     dispatch({ type: FETCH_POST_REQUEST });
-
+    console.log(id);
     const { data } = await axios({
       url: `${process.env.REACT_APP_BLOG_API}/api/posts/${id}`,
     });
 
+    console.log(data);
     dispatch({
       type: FETCH_POST_SUCCESS,
       payload: data,
@@ -141,34 +142,33 @@ export const editPostAction = (post, postId) => async (dispatch) => {
   }
 };
 
-export const deletePostAction =
-  ({ email, password }) =>
-  async (dispatch, getState) => {
-    try {
-      dispatch({ type: DELETE_POST_REQUEST });
+export const deletePostAction = (postId) => async (dispatch) => {
+  try {
+    dispatch({ type: DELETE_POST_REQUEST });
 
-      const { data } = await axios({
-        url: `${process.env.REACT_APP_BLOG_API}/api/users/signin`,
-        method: "POST",
-        data: { email, password },
-      });
+    const { data } = await axios({
+      url: `${process.env.REACT_APP_BLOG_API}/api/posts/${postId}`,
+      method: "DELETE",
+      headers: {
+        Authorization:
+          localStorage.getItem("NODE_USER") &&
+          JSON.parse(localStorage.getItem("NODE_USER")).token
+            ? JSON.parse(localStorage.getItem("NODE_USER")).token
+            : "",
+      },
+    });
 
-      dispatch({
-        type: DELETE_POST_SUCCESS,
-        payload: data,
-      });
-
-      localStorage.setItem(
-        "NODE_USER",
-        JSON.stringify(getState().userLogin.user)
-      );
-    } catch (error) {
-      dispatch({
-        type: DELETE_POST_FAILED,
-        payload:
-          error.response && error.response.data.message
-            ? error.response.data.message
-            : error.message,
-      });
-    }
-  };
+    dispatch({
+      type: DELETE_POST_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    dispatch({
+      type: DELETE_POST_FAILED,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    });
+  }
+};
