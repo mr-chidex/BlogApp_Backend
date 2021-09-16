@@ -54,7 +54,7 @@ const Home = ({ history }) => {
       <div className="hero-container mb-3">
         <div className="hero"></div>
         <div className="text-center my-3 header-hero">
-          <h1>Get the best news in a split second &#128513;.</h1>
+          <h2>Get the best news in a split second &#128513;.</h2>
           <h3>A Home away from home</h3>
         </div>
       </div>
