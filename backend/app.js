@@ -24,7 +24,7 @@ app.get("/", (req, res) => {
   });
 });
 app.use("/api/posts", postRouter);
-app.use("/api/user", userRouter);
+app.use("/api/users", userRouter);
 app.use(error);
 
 mongoose

@@ -27,13 +27,13 @@ const Home = ({ history }) => {
         `${process.env.REACT_APP_POST_API}?page=${page}`
       );
       setIsLoading(false);
-      setPosts(data.posts);
-      const lastPage = Math.ceil(data.totalPost / 5);
-      setLastPage(lastPage);
+      setPosts(data?.posts);
+      const lastPage = Math.ceil(data?.totalPost / 5);
+      // setLastPage(lastPage);
     } catch (error) {
       setError(true);
       setMessage(
-        error.response && error.response.data.message
+        error.response && error.response?.data?.message
           ? error.response.data.message
           : error.message
       );
@@ -86,7 +86,7 @@ const Home = ({ history }) => {
         return newPost;
       });
     },
-    [fetchPosts, posts.length]
+    [fetchPosts, posts?.length]
   );
 
   useEffect(() => {
@@ -155,7 +155,7 @@ const Home = ({ history }) => {
       </div>
 
       <main className="container-lg main">
-        {user && user.name && (
+        {user?.name && (
           <button
             onClick={() => history.push("/new")}
             className="btn btn-success d-inline-block me-auto mb-4"
@@ -178,13 +178,13 @@ const Home = ({ history }) => {
           </Message>
         )}
 
-        {error && (
+        {/* {error && (
           <Message status="error" click={removeMessage}>
             {message}
           </Message>
-        )}
+        )} */}
 
-        {posts.length > 0
+        {posts?.length > 0
           ? posts.map((post) => (
               <div className="card my-4" key={post._id}>
                 <div className="card-body">
