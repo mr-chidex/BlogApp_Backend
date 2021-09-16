@@ -1,5 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import axios from "axios";
+import { useSelector, useDispatch } from "react-redux";
+
 import Message from "../components/Message";
 import { generateBase64FromImage } from "../utils/image";
 
@@ -23,7 +25,7 @@ const EditPost = ({ location, match, history }) => {
       const fetchSinglePost = async (postId) => {
         try {
           const { data } = await axios.get(
-            `${process.env.REACT_APP_POST_API}/${match.params.postId}`
+            `${process.env.REACT_APP_BLOG_API}/api/posts/${match.params.postId}`
           );
           setEdit(true);
           setTitle(data.post.title);
@@ -56,7 +58,7 @@ const EditPost = ({ location, match, history }) => {
 
     try {
       await axios({
-        url: `${process.env.REACT_APP_POST_API}`,
+        url: `${process.env.REACT_APP_BLOG_API}/api/posts`,
         method: "POST",
         data: formaData,
         headers: {
@@ -92,7 +94,7 @@ const EditPost = ({ location, match, history }) => {
 
     try {
       await axios({
-        url: `${process.env.REACT_APP_POST_API}/${match.params.postId}`,
+        url: `${process.env.REACT_APP_BLOG_API}/api/posts/${match.params.postId}`,
         method: "PUT",
         data: formaData,
         headers: {

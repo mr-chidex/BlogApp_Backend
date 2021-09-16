@@ -14,7 +14,7 @@ const SinglePost = ({ match }) => {
       try {
         setIsLoading(true);
         const { data } = await axios.get(
-          `${process.env.REACT_APP_POST_API}/${match.params.postId}`
+          `${process.env.REACT_APP_BLOG_API}/api/posts/${match.params.postId}`
         );
         setPost(data.post);
         setIsLoading(false);

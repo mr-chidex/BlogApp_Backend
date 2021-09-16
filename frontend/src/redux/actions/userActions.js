@@ -15,7 +15,7 @@ export const userSignupAction = (user) => async (dispatch, getState) => {
     dispatch({ type: USER_SIGNUP_REQUEST });
 
     const { data } = await axios({
-      url: `${process.env.REACT_APP_POST_API}/api/users/signup`,
+      url: `${process.env.REACT_APP_BLOG_API}/api/users/signup`,
       method: "POST",
       data: { email, password, name },
     });
@@ -42,7 +42,7 @@ export const userLoginAction =
       dispatch({ type: USER_LOGIN_REQUEST });
 
       const { data } = await axios({
-        url: `${process.env.REACT_APP_POST_API}/api/users/signin`,
+        url: `${process.env.REACT_APP_BLOG_API}/api/users/signin`,
         method: "POST",
         data: { email, password },
       });
