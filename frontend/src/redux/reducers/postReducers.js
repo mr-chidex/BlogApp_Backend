@@ -11,9 +11,9 @@ import {
   FETCH_POSTS_REQUEST,
   FETCH_POSTS_SUCCESS,
   FETCH_POSTS_FAILED,
-  DELETE_POST_REQUEST,
-  DELETE_POST_SUCCESS,
-  DELETE_POST_FAILED,
+  //   DELETE_POST_REQUEST,
+  //   DELETE_POST_SUCCESS,
+  //   DELETE_POST_FAILED,
 } from "../constants/postConstants";
 
 const initialState = {
@@ -96,23 +96,25 @@ export const postReducer = (state = initialState, action) => {
         message: action.payload,
         error: true,
       };
-    case DELETE_POST_REQUEST:
-      return {
-        loading: true,
-      };
-    case DELETE_POST_SUCCESS:
-      return {
-        post: action.payload,
-        loadng: false,
-        success: true,
-      };
-    case DELETE_POST_FAILED:
-      return {
-        loading: false,
-        post: {},
-        message: action.payload,
-        error: true,
-      };
+    // case DELETE_POST_REQUEST:
+    //   return {
+    //     loading: true,
+    //   };
+    // case DELETE_POST_SUCCESS:
+    //   return {
+
+    //     post: action.payload.post,
+    //     loadng: false,
+    //     success: true,
+    //     message: action.payload.message,
+    //   };
+    // case DELETE_POST_FAILED:
+    //   return {
+    //     loading: false,
+    //     post: {},
+    //     message: action.payload,
+    //     error: true,
+    //   };
     default:
       return state;
   }

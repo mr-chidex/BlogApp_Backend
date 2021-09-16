@@ -138,3 +138,13 @@ footer ul {
   justify-content: center;
   align-items: center;
 }
+
+.header-title {
+  display: flex;
+  align-items: center;
+  font-weight: bold;
+}
+
+.header-title span {
+  color: #f05d08;
+}

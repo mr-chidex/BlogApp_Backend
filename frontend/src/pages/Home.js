@@ -8,16 +8,27 @@ import Message from "../components/Message";
 const Home = ({ history }) => {
   const [page, setPage] = useState(1);
   const [alerts, setAlerts] = useState(false);
+  const [posts, setPosts] = useState([]);
 
   const defaultPosts = 5;
   const dispatch = useDispatch();
 
   const { user } = useSelector((state) => state.userLogin);
-  const { posts, loading, totalPost, error, message } = useSelector(
-    (state) => state.blogPost
-  );
+  const {
+    posts: apiPosts,
+    loading,
+    totalPost,
+    error,
+    message,
+  } = useSelector((state) => state.blogPost);
 
   const lastPage = totalPost && Math.ceil(totalPost / 5);
+
+  useEffect(() => {
+    if (apiPosts) {
+      setPosts(apiPosts);
+    }
+  }, [apiPosts]);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -29,6 +40,7 @@ const Home = ({ history }) => {
   }, [page, dispatch]);
 
   const deletePost = async (postId) => {
+    setPosts((prev) => prev.filter((post) => post._id !== postId));
     dispatch(deletePostAction(postId));
     setAlerts(true);
   };
@@ -41,9 +53,10 @@ const Home = ({ history }) => {
     <>
       <div className="hero-container mb-3">
         <div className="hero"></div>
-        <h1 className="text-center my-3 header-hero">
-          Welcome To Mr-Chidex Blog
-        </h1>
+        <div className="text-center my-3 header-hero">
+          <h1>Get the best news in a split second &#128513;.</h1>
+          <h3>A Home away from home</h3>
+        </div>
       </div>
 
       <main className="container-lg main">

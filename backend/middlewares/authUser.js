@@ -14,13 +14,13 @@ exports.authUser = async (req, res, next) => {
 
     if (!token) return res.status(401).json({ message: "Invalid token" });
 
-    const decodedToken = JWT.decode(token);
+    // const decodedToken = JWT.decode(token);
     // console.log(Date.now());
     // console.log(decodedToken.exp);
-    if (Date.now() >= decodedToken.exp)
-      return res
-        .status(401)
-        .json({ message: "sessioned has expired, please login" });
+    // if (Date.now() >= decodedToken.exp)
+    //   return res
+    //     .status(401)
+    //     .json({ message: "sessioned has expired, please login" });
 
     const decode = JWT.verify(token, process.env.SECRET_KEY);
 

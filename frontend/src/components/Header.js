@@ -17,7 +17,9 @@ const Header = () => {
     <nav className="navbar navbar-expand-lg navbar-dark bg-dark fixed-top navigation">
       <div className="container-fluid">
         <NavLink className="navbar-brand" to="/">
-          <HomeIcon /> Blog
+          <div className="header-title">
+            <HomeIcon /> CH <span>ID</span>EX
+          </div>
         </NavLink>
         <button
           className="navbar-toggler"
