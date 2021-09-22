@@ -6,7 +6,7 @@ const { validationResult } = require("express-validator");
 const cloudinary = require("../utils/cloudinary");
 const folderPath = require("../utils/folder");
 const io = require("../socket");
-const deleteImage = require("../handlers/deleteImage");
+// const deleteImage = require("../handlers/deleteImage");
 
 //@desc     get all post
 //@Route    GET /api/posts/

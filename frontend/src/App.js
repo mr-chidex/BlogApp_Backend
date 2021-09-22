@@ -5,11 +5,29 @@ import Home from "./pages/Home";
 import SignIn from "./pages/SignIn";
 import SignUp from "./pages/SignUp";
 import SinglePost from "./pages/SinglePost";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import jwtDecode from "jwt-decode";
+
+import { userLogoutAction } from "./redux/actions/userActions";
 import Footer from "./components/Footer";
 
 const App = () => {
   const { user } = useSelector((state) => state.userLogin);
+  const dispatch = useDispatch();
+  const USER_TOKEN = JSON.parse(localStorage.NODE_USER)?.token?.split(" ")[1];
+
+  if (USER_TOKEN) {
+    try {
+      const decodedToken = jwtDecode(USER_TOKEN);
+
+      if (decodedToken.exp < new Date().getTime() / 1000) {
+        dispatch(userLogoutAction());
+      }
+    } catch (error) {
+      dispatch(userLogoutAction());
+    }
+  }
+
   return (
     <div className="App">
       <Header />
