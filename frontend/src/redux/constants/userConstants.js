@@ -7,3 +7,5 @@ export const USER_SIGNUP_SUCCESS = "USER_SIGNUP_SUCCESS";
 export const USER_SIGNUP_FAILED = "USER_SIGNUP_FAILED";
 
 export const USER_LOGOUT = "USER_LOGOUT";
+
+export const SET_USER = "SET_USER";

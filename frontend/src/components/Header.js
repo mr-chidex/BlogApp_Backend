@@ -6,7 +6,7 @@ import HomeIcon from "@material-ui/icons/Home";
 import { userLogoutAction } from "../redux/actions/userActions";
 
 const Header = () => {
-  const { user } = useSelector((state) => state.userLogin);
+  const { user } = useSelector((state) => state.userData);
   const dispatch = useDispatch();
 
   const logoutHandler = () => {

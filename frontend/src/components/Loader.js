@@ -1,12 +1,15 @@
+import { Typography } from "@mui/material";
+import { Box } from "@mui/system";
 import React from "react";
-import { CircleSpinner } from "react-spinners-kit";
 
-const Loader = ({ loading }) => {
+const Loader = () => {
   return (
-    <div style={{ width: "5rem", margin: "0 auto" }}>
-      {" "}
-      <CircleSpinner size={30} color="#686769" loading={loading} />
-    </div>
+    <Box m={6}>
+      <Typography align="center" variant="h1">
+        Loading...
+      </Typography>
+    </Box>
   );
 };
+
 export default Loader;

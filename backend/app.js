@@ -36,7 +36,7 @@ mongoose
     console.log("db connected...");
 
     const server = app.listen(process.env.PORT || 8080, () =>
-      console.log("server running...")
+      console.log("server running... running on port 8080")
     );
 
     const io = require("./socket").init(server);

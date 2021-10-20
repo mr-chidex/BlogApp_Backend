@@ -13,7 +13,7 @@ const Home = ({ history }) => {
   const defaultPosts = 5;
   const dispatch = useDispatch();
 
-  const { user } = useSelector((state) => state.userLogin);
+  const { user } = useSelector((state) => state.userData);
   const {
     posts: apiPosts,
     loading,

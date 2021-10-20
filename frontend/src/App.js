@@ -1,32 +1,44 @@
 import { Route, Switch, Redirect } from "react-router-dom";
+import { useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import jwtDecode from "jwt-decode";
+
 import Header from "./components/Header";
 import EditPost from "./pages/EditPost";
 import Home from "./pages/Home";
 import SignIn from "./pages/SignIn";
 import SignUp from "./pages/SignUp";
 import SinglePost from "./pages/SinglePost";
-import { useSelector, useDispatch } from "react-redux";
-import jwtDecode from "jwt-decode";
-
-import { userLogoutAction } from "./redux/actions/userActions";
 import Footer from "./components/Footer";
+import {
+  setAuthorizationHeader,
+  setUser,
+  userLogoutAction,
+} from "./redux/actions/userActions";
 
 const App = () => {
-  const { user } = useSelector((state) => state.userLogin);
+  const { user } = useSelector((state) => state.userData);
   const dispatch = useDispatch();
-  const USER_TOKEN = JSON.parse(localStorage.NODE_USER)?.token?.split(" ")[1];
 
-  if (USER_TOKEN) {
-    try {
-      const decodedToken = jwtDecode(USER_TOKEN);
+  useEffect(() => {
+    if (localStorage.H_TOKEN) {
+      setAuthorizationHeader(localStorage.H_TOKEN);
+      try {
+        const decodedToken = jwtDecode(localStorage.H_TOKEN);
 
-      if (decodedToken.exp < new Date().getTime() / 1000) {
+        if (decodedToken) {
+          dispatch(setUser(decodedToken));
+
+          if (decodedToken.exp < new Date().getTime() / 1000) {
+            dispatch(userLogoutAction());
+          }
+        }
+      } catch (error) {
         dispatch(userLogoutAction());
+        console.log(error);
       }
-    } catch (error) {
-      dispatch(userLogoutAction());
     }
-  }
+  });
 
   return (
     <div className="App">

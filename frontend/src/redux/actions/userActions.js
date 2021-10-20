@@ -1,3 +1,5 @@
+import axios from "axios";
+
 import {
   USER_LOGIN_FAILED,
   USER_LOGIN_REQUEST,
@@ -6,10 +8,10 @@ import {
   USER_SIGNUP_REQUEST,
   USER_SIGNUP_SUCCESS,
   USER_SIGNUP_FAILED,
+  SET_USER,
 } from "../constants/userConstants";
-import axios from "axios";
 
-export const userSignupAction = (user) => async (dispatch, getState) => {
+export const userSignupAction = (user) => async (dispatch) => {
   try {
     const { name, email, password } = user;
     dispatch({ type: USER_SIGNUP_REQUEST });
@@ -53,7 +55,7 @@ export const userLoginAction =
       });
 
       localStorage.setItem(
-        "NODE_USER",
+        "USER_TOKEN",
         JSON.stringify(getState().userLogin.user)
       );
     } catch (error) {
@@ -67,7 +69,23 @@ export const userLoginAction =
     }
   };
 
-export const userLogoutAction = () => async (dispatch, getState) => {
-  localStorage.removeItem("NODE_USER");
+export const setUser = (user) => {
+  return {
+    type: SET_USER,
+    payload: user,
+  };
+};
+
+export const userLogoutAction = () => async (dispatch) => {
+  localStorage.removeItem("USER_TOKEN");
+  delete axios.defaults.headers.common["Authorization"];
   dispatch({ type: USER_LOGOUT });
+};
+
+export const setAuthorizationHeader = (token) => {
+  if (token) {
+    axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+  } else {
+    delete axios.defaults.headers.common["Authorization"];
+  }
 };
