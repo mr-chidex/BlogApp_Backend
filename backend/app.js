@@ -5,13 +5,13 @@ const app = express();
 const path = require("path");
 const mongoose = require("mongoose");
 require("dotenv").config();
+
 const User = require("./models/user");
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 app.use(morgan("dev"));
-app.use("/images", express.static(path.join(__dirname, "images")));
 
 const postRouter = require("./routes/posts");
 const error = require("./controllers/error");
@@ -35,13 +35,9 @@ mongoose
   .then(async () => {
     console.log("db connected...");
 
-    const server = app.listen(process.env.PORT || 8080, () =>
+    app.listen(process.env.PORT || 8080, () =>
       console.log("server running... running on port 8080")
     );
-
-    const io = require("./socket").init(server);
-
-    io.on("connection", (socket) => console.log("client connected"));
 
     const user = await User.find();
     if (user.length === 0) {

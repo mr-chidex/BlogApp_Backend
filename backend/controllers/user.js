@@ -62,12 +62,7 @@ const signIn = async (req, res, next) => {
 
   const token = getToken(user);
 
-  res.json({
-    name: user.name,
-    email: user.email,
-    token: `Bearer ${token}`,
-    status: user.status,
-  });
+  res.json({ token });
 };
 
 module.exports = { signUp, signIn };

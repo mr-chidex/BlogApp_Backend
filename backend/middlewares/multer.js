@@ -10,7 +10,7 @@ const imageFilter = (req, file, cb) => {
     ) {
       cb(null, true);
     } else {
-      throw new Error("please upload an image file: Unacceptable file format");
+      cb(null, false);
     }
   } catch (err) {
     err.statusCode = 400;
@@ -18,17 +18,7 @@ const imageFilter = (req, file, cb) => {
   }
 };
 
-// const imageStorage = multer.diskStorage({
-//   destination: (req, file, cb) => {
-//     cb(null, "images");
-//   },
-//   filename: (req, file, cb) => {
-//     cb(null, v4() + "-" + file.originalname);
-//   },
-// });
-
 module.exports = multer({
   storage: multer.diskStorage({}),
   fileFilter: imageFilter,
-  limits: { fileSize: 500000 },
 });

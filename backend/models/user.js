@@ -21,12 +21,11 @@ const userSchema = new Schema({
     required: true,
     default: "I am new",
   },
-  posts: [
-    {
-      type: Schema.Types.ObjectId,
-      ref: "Posts",
-    },
-  ],
+  isAdmin: { type: Boolean, default: false },
+  image: {
+    type: Object,
+    default: null,
+  },
 });
 
 userSchema.pre("save", async function (next) {

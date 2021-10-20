@@ -8,22 +8,24 @@ exports.authUser = async (req, res, next) => {
       return res.status(401).json({ message: "Unauthorized" });
 
     if (!req.headers.authorization.startsWith("Bearer"))
-      return res.status(401).json({ message: "Unauthorized" });
+      return res.status(400).json({ message: "invalid token format" });
 
     const token = req.headers.authorization.split(" ")[1];
 
-    if (!token) return res.status(401).json({ message: "Invalid token" });
+    if (!token) return res.status(401).json({ message: "Access denied" });
 
-    // const decodedToken = JWT.decode(token);
-    // if (Date.now() >= decodedToken.exp * 1000)
-    //   return res
-    //     .status(401)
-    //     .json({ message: "sessioned has expired, please login" });
+    const decodedToken = JWT.verify(token, process.env.SECRET_KEY);
 
-    const decode = JWT.verify(token, process.env.SECRET_KEY);
+    if (!decodedToken)
+      return res.status(401).json({ message: "Access denied" });
 
-    if (!decode) return res.status(401).json({ message: "Expired token" });
-    const user = await User.findById(decode.userId).select("-password");
+    if (Date.now() >= decodedToken.exp * 1000)
+      return res.status(400).json({ message: "Token expired" });
+
+    const user = await User.findOne({ _id: decodedToken.userId });
+
+    if (!user) return res.status(401).json({ message: "Access denied" });
+
     req.user = user;
     next();
   } catch (error) {
