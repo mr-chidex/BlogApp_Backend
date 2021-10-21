@@ -1,10 +1,11 @@
 import React from "react";
 import { Container, makeStyles } from "@material-ui/core";
 import { NavLink } from "react-router-dom";
-
 import { IconButton, Avatar } from "@mui/material";
 import { Facebook, Instagram, Twitter } from "@material-ui/icons";
+
 import Logo from "./Logo";
+import DropDown from "./DropDown";
 
 const useStyles = makeStyles({
   facebook: {
@@ -66,13 +67,11 @@ const Header = () => {
           <Logo />
 
           <div className={classes.left}>
-            <NavLink className={classes.links} to="/">
+            <NavLink className={classes.links} to="/signin">
               Signin
             </NavLink>
 
-            <IconButton>
-              <Avatar fontSize="small" size="small" />
-            </IconButton>
+            <DropDown display={<Avatar />} />
           </div>
         </nav>
       </Container>
