@@ -1,71 +1,82 @@
 import React from "react";
+import { Container, makeStyles } from "@material-ui/core";
 import { NavLink } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import AccountCircleIcon from "@material-ui/icons/AccountCircle";
-import HomeIcon from "@material-ui/icons/Home";
-import { userLogoutAction } from "../redux/actions/userActions";
+
+import { IconButton, Avatar } from "@mui/material";
+import { Facebook, Instagram, Twitter } from "@material-ui/icons";
+import Logo from "./Logo";
+
+const useStyles = makeStyles({
+  facebook: {
+    color: "#fff",
+  },
+  header: {
+    backgroundColor: "#111",
+    color: "#fff",
+    padding: "0.5rem 0",
+    marginBottom: "1rem",
+  },
+  nav: {
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  links: {
+    textDecoration: "none",
+    color: "#fff",
+    marginRight: "0.6rem",
+  },
+  left: {
+    display: "flex",
+    alignItems: "center",
+  },
+});
 
 const Header = () => {
-  const { user } = useSelector((state) => state.userData);
-  const dispatch = useDispatch();
-
-  const logoutHandler = () => {
-    dispatch(userLogoutAction());
-  };
+  const classes = useStyles();
 
   return (
-    <nav className="navbar navbar-expand-lg navbar-dark bg-dark fixed-top navigation">
-      <div className="container-fluid">
-        <NavLink className="navbar-brand" to="/">
-          <div className="header-title">
-            <HomeIcon /> CH <span>ID</span>EX
+    <div className={classes.header}>
+      <Container maxWidth="xl">
+        <nav className={classes.nav}>
+          <div className="desktop">
+            <IconButton
+              aria-label="search"
+              className="search-icon"
+              color="inherit"
+            >
+              <Facebook className={classes.facebook} />
+            </IconButton>
+            <IconButton
+              aria-label="search"
+              className="search-icon"
+              color="inherit"
+            >
+              <Twitter className={classes.facebook} />
+            </IconButton>
+            <IconButton
+              aria-label="search"
+              className="search-icon"
+              color="inherit"
+            >
+              <Instagram className={classes.facebook} />
+            </IconButton>
           </div>
-        </NavLink>
-        <button
-          className="navbar-toggler"
-          type="button"
-          data-toggle="collapse"
-          data-target="#navbarSupportedContent"
-          aria-controls="navbarSupportedContent"
-          aria-expanded="false"
-          aria-label="Toggle navigation"
-        >
-          <span className="navbar-toggler-icon"></span>
-        </button>
-        <div className="collapse navbar-collapse" id="navbarSupportedContent">
-          <ul className="navbar-nav ml-auto">
-            {!user && (
-              <li className="nav-item">
-                <NavLink className="nav-link" to="/signin">
-                  Signin
-                </NavLink>
-              </li>
-            )}
-            {!user && (
-              <li className="nav-item">
-                <NavLink className="nav-link" to="/signup">
-                  Signup
-                </NavLink>
-              </li>
-            )}
-            {user && user.name && (
-              <li className="">
-                <button className="user">
-                  <AccountCircleIcon titleAccess={user.name} />
-                </button>
-              </li>
-            )}
-            {user && (
-              <li className="nav-item">
-                <button className="logout" onClick={logoutHandler}>
-                  Logout
-                </button>
-              </li>
-            )}
-          </ul>
-        </div>
-      </div>
-    </nav>
+
+          <Logo />
+
+          <div className={classes.left}>
+            <NavLink className={classes.links} to="/">
+              Signin
+            </NavLink>
+
+            <IconButton>
+              <Avatar fontSize="small" size="small" />
+            </IconButton>
+          </div>
+        </nav>
+      </Container>
+    </div>
   );
 };
 
