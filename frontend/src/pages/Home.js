@@ -200,54 +200,58 @@ const Home = () => {
               </div>
             </Box>
 
-            <div className="latest-news">
-              <div className="latest-news-header">
-                <NotesIcon className="icon" fontSize="large" />
-                <h1>Recent Posts</h1>
-              </div>
+            {posts?.length === 0 ? (
+              <div className="latest-news">
+                <div className="latest-news-header">
+                  <NotesIcon className="icon" fontSize="large" />
+                  <h1>Recent Posts</h1>
+                </div>
 
-              {posts?.map((post) => (
-                <Card
-                  key={post?.id}
-                  className="latest-news-card"
-                  onClick={() => history.push(`/${post?._id}`)}
-                >
-                  <CardActionArea>
-                    <div className="latest-news-content">
-                      <div className="info">
-                        <h3>{post.title}</h3>
-                        <div className="featured-news-content__timer">
-                          <span className="name">By: {post?.author?.name}</span>{" "}
-                          <EventAvailableIcon
-                            className="icon"
-                            fontSize="small"
-                          />{" "}
-                          <span>
-                            {new Date(post.createdAt).toLocaleDateString()}
-                          </span>
+                {posts?.map((post) => (
+                  <Card
+                    key={post?.id}
+                    className="latest-news-card"
+                    onClick={() => history.push(`/${post?._id}`)}
+                  >
+                    <CardActionArea>
+                      <div className="latest-news-content">
+                        <div className="info">
+                          <h3>{post.title}</h3>
+                          <div className="featured-news-content__timer">
+                            <span className="name">
+                              By: {post?.author?.name}
+                            </span>{" "}
+                            <EventAvailableIcon
+                              className="icon"
+                              fontSize="small"
+                            />{" "}
+                            <span>
+                              {new Date(post.createdAt).toLocaleDateString()}
+                            </span>
+                          </div>
+                          <p>{post?.content?.substring(0, 400)}...</p>
                         </div>
-                        <p>{post?.content?.substring(0, 400)}...</p>
-                      </div>
 
-                      <div className="image-container">
-                        <CardMedia
-                          className={classes.media}
-                          image={post?.image?.url}
-                          title="Live from space album cover"
-                          component="img"
-                        />
+                        <div className="image-container">
+                          <CardMedia
+                            className={classes.media}
+                            image={post?.image?.url}
+                            title="Live from space album cover"
+                            component="img"
+                          />
+                        </div>
                       </div>
-                    </div>
-                  </CardActionArea>
-                </Card>
-              ))}
+                    </CardActionArea>
+                  </Card>
+                ))}
 
-              <PaginationTab
-                totalPage={totalPage}
-                countPerPage={countPerPage}
-                page={page}
-              />
-            </div>
+                <PaginationTab
+                  totalPage={totalPage}
+                  countPerPage={countPerPage}
+                  page={page}
+                />
+              </div>
+            ) : null}
 
             {/***weekly top */}
             <div className="latest-news spotlight-news">
