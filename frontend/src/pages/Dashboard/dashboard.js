@@ -14,7 +14,7 @@ import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import ListItem from "@mui/material/ListItem";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
-import { useHistory, Redirect } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import {
   Accordion,
   AccordionDetails,
@@ -101,7 +101,6 @@ const DrawerHeader = styled("div")(({ theme }) => ({
   display: "flex",
   alignItems: "center",
   padding: theme.spacing(0, 1),
-  // necessary for content to be below app bar
   ...theme.mixins.toolbar,
   justifyContent: "flex-end",
 }));
@@ -113,7 +112,7 @@ export default function DashboardNav({ children }) {
   const dispatch = useDispatch();
   const home = window.location.origin;
   const history = useHistory();
-  const { user, isAuth } = useSelector((state) => state.userData);
+  const { user } = useSelector((state) => state.userData);
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -127,9 +126,7 @@ export default function DashboardNav({ children }) {
     dispatch(userLogoutAction());
   };
 
-  return !isAuth ? (
-    <Redirect to="/signin" />
-  ) : (
+  return (
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
       <AppBar position="fixed" open={open}>

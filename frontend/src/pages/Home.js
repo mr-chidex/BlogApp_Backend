@@ -4,20 +4,19 @@ import {
   Card,
   CardActionArea,
   CardMedia,
-  Chip,
   Container,
   Grid,
-  makeStyles,
-} from "@material-ui/core";
+} from "@mui/material";
 
 import EventAvailableIcon from "@material-ui/icons/EventAvailable";
 import NotesIcon from "@material-ui/icons/Notes";
 
 import axios from "axios";
 import { useDispatch } from "react-redux";
+import { useHistory, Link } from "react-router-dom";
+import { makeStyles } from "@material-ui/core";
 
 import { setSnackbar } from "../redux/actions/uiActions";
-import { useHistory, Link } from "react-router-dom";
 import PaginationTab from "../components/PaginationTab";
 import MediaCard from "../components/MediaCard";
 import SideBar from "../components/SideBar";
