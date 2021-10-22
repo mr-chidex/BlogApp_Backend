@@ -1,7 +1,7 @@
 const Posts = require("../models/posts");
-const User = require("../models/user");
 const mongoose = require("mongoose");
 const { validationResult } = require("express-validator");
+const slugify = require("slugify");
 
 const cloudinary = require("../utils/cloudinary");
 const folderPath = require("../utils/folder");
@@ -56,6 +56,7 @@ const addNewPost = async (req, res, next) => {
       image_id: image.public_id?.split("/")[2],
     },
     author: req.user,
+    url: slugify(title, { lower: true, strict: true }),
   });
   await post.save();
   io.getIO().emit("posts", { action: "CREATE_POST", post: post });
@@ -135,6 +136,8 @@ const updatePost = async (req, res, next) => {
 
   post.title = title;
   post.content = content;
+  post.url = slugify(title, { lower: true, strict: true });
+
   if (req.file) {
     await cloudinary.v2.uploader.destroy(
       `${folderPath}/${post.image.image_Id}`

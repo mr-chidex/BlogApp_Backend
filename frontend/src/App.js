@@ -9,6 +9,7 @@ import SignIn from "./pages/SignIn";
 import SignUp from "./pages/SignUp";
 import SinglePost from "./pages/SinglePost";
 import Footer from "./components/Footer";
+import Dashboard from "./pages/Dashboard/Index";
 import {
   setAuthorizationHeader,
   setUser,
@@ -45,6 +46,7 @@ const App = () => {
       <Switch>
         <Route exact path="/signup" component={SignUp} />
         <Route exact path="/signin" component={SignIn} />
+        <Route exact path="/dashboard" component={Dashboard} />
         <Route exact path="/:postId" component={SinglePost} />
         <Route exact path="/" component={Home} />
         <Redirect to="/" />
