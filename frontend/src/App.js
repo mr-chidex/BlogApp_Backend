@@ -39,7 +39,6 @@ const App = () => {
         }
       } catch (error) {
         dispatch(userLogoutAction());
-        console.log(error);
       }
     }
   }, [dispatch]);

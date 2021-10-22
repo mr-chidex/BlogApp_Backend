@@ -7,9 +7,8 @@ import {
   Container,
   Grid,
 } from "@mui/material";
-
-import EventAvailableIcon from "@material-ui/icons/EventAvailable";
-import NotesIcon from "@material-ui/icons/Notes";
+import EventAvailableIcon from "@mui/icons-material/EventAvailable";
+import NotesIcon from "@mui/icons-material/Notes";
 
 import axios from "axios";
 import { useDispatch } from "react-redux";
@@ -20,6 +19,7 @@ import { setSnackbar } from "../redux/actions/uiActions";
 import PaginationTab from "../components/PaginationTab";
 import MediaCard from "../components/MediaCard";
 import SideBar from "../components/SideBar";
+import { EventAvailableOutlined } from "@material-ui/icons";
 
 const useStyles = makeStyles({
   media: {
@@ -35,9 +35,13 @@ const Home = () => {
   const [loading, setLoading] = useState(true);
   const dispatch = useDispatch();
   const history = useHistory();
-  const defaultPosts = 5;
+  const defaultPosts = 4;
   const limit = 20;
   const classes = useStyles();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   useEffect(() => {
     (async () => {
@@ -45,7 +49,6 @@ const Home = () => {
         const { data } = await axios.get(
           `${process.env.REACT_APP_BLOG_API}/api/posts?page=${page}&limit=${limit}`
         );
-        console.log(data?.result?.data);
         setPosts(data?.result?.data);
         setTotalPage(data?.result?.totalCount);
         setCountPerPage(data?.result?.countPerPage);
@@ -190,7 +193,7 @@ const Home = () => {
                   <h1>{mainFeaturedPost.title}</h1>
                   <div className="featured-news-content__timer">
                     <span className="name">By: Mr-Chidex</span>{" "}
-                    <EventAvailableIcon className="icon" fontSize="small" />{" "}
+                    <EventAvailableOutlined className="icon" fontSize="small" />{" "}
                     <span>Dec 23, 2021</span>
                   </div>
                   <p>{mainFeaturedPost.description.substr(0, 200)}...</p>
@@ -199,58 +202,72 @@ const Home = () => {
               </div>
             </Box>
 
-            {posts?.length > 0 ? (
-              <div className="latest-news">
-                <div className="latest-news-header">
-                  <NotesIcon className="icon" fontSize="large" />
-                  <h1>Recent Posts</h1>
-                </div>
-
-                {posts?.map((post) => (
-                  <Card
-                    key={post?.id}
-                    className="latest-news-card"
-                    onClick={() => history.push(`/${post?._id}`)}
-                  >
-                    <CardActionArea>
-                      <div className="latest-news-content">
-                        <div className="info">
-                          <h3>{post.title}</h3>
-                          <div className="featured-news-content__timer">
-                            <span className="name">
-                              By: {post?.author?.name}
-                            </span>{" "}
-                            <EventAvailableIcon
-                              className="icon"
-                              fontSize="small"
-                            />{" "}
-                            <span>
-                              {new Date(post.createdAt).toLocaleDateString()}
-                            </span>
-                          </div>
-                          <p>{post?.content?.substring(0, 400)}...</p>
-                        </div>
-
-                        <div className="image-container">
-                          <CardMedia
-                            className={classes.media}
-                            image={post?.image?.url}
-                            title="Live from space album cover"
-                            component="img"
-                          />
-                        </div>
-                      </div>
-                    </CardActionArea>
-                  </Card>
+            {loading ? (
+              <div>
+                {[...Array(defaultPosts)].map((_, index) => (
+                  <div className="default" />
                 ))}
-
-                <PaginationTab
-                  totalPage={totalPage}
-                  countPerPage={countPerPage}
-                  page={page}
-                />
               </div>
-            ) : null}
+            ) : (
+              <div>
+                {posts?.length > 0 ? (
+                  <div className="latest-news">
+                    <div className="latest-news-header">
+                      <NotesIcon className="icon" fontSize="large" />
+                      <h1>Recent Posts</h1>
+                    </div>
+
+                    {posts?.map((post) => (
+                      <Card
+                        key={post?._id}
+                        className="latest-news-card"
+                        onClick={() => history.push(`/${post?._id}`)}
+                      >
+                        <CardActionArea>
+                          <div className="latest-news-content">
+                            <div className="info">
+                              <h3>{post.title}</h3>
+                              <div className="featured-news-content__timer">
+                                <span className="name">
+                                  By: {post?.author?.name}
+                                </span>{" "}
+                                <EventAvailableIcon
+                                  className="icon"
+                                  fontSize="small"
+                                />{" "}
+                                <span>
+                                  {new Date(
+                                    post.createdAt
+                                  ).toLocaleDateString()}
+                                </span>
+                              </div>
+                              <p>{post?.content?.substring(0, 400)}...</p>
+                            </div>
+
+                            <div className="image-container">
+                              <CardMedia
+                                className={classes.media}
+                                image={post?.image?.url}
+                                title="Live from space album cover"
+                                component="img"
+                              />
+                            </div>
+                          </div>
+                        </CardActionArea>
+                      </Card>
+                    ))}
+
+                    <PaginationTab
+                      totalPage={totalPage}
+                      countPerPage={countPerPage}
+                      page={page}
+                    />
+                  </div>
+                ) : (
+                  <h2>No Recent Post</h2>
+                )}
+              </div>
+            )}
 
             {/***weekly top */}
             <div className="latest-news spotlight-news">

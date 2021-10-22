@@ -2,7 +2,8 @@ import React from "react";
 import { Container, makeStyles } from "@material-ui/core";
 import { NavLink } from "react-router-dom";
 import { IconButton, Avatar } from "@mui/material";
-import { Facebook, Instagram, Twitter } from "@material-ui/icons";
+import { Facebook, Instagram, Twitter } from "@mui/icons-material";
+// import { Facebook, Instagram, Twitter } from "@material-ui/icons";
 import { useLocation } from "react-router-dom";
 import Logo from "./Logo";
 import DropDown from "./DropDown";
@@ -31,6 +32,9 @@ const useStyles = makeStyles({
     display: "flex",
     alignItems: "center",
   },
+  search: {
+    padding: "12px",
+  },
 });
 
 const Header = () => {
@@ -43,24 +47,24 @@ const Header = () => {
     <div className={classes.header}>
       <Container maxWidth="xl">
         <nav className={classes.nav}>
-          <div className="desktop">
+          <div>
             <IconButton
               aria-label="search"
-              className="search-icon"
+              className={classes.search}
               color="inherit"
             >
               <Facebook className={classes.facebook} />
             </IconButton>
             <IconButton
               aria-label="search"
-              className="search-icon"
+              className={classes.search}
               color="inherit"
             >
               <Twitter className={classes.facebook} />
             </IconButton>
             <IconButton
               aria-label="search"
-              className="search-icon"
+              className={classes.search}
               color="inherit"
             >
               <Instagram className={classes.facebook} />

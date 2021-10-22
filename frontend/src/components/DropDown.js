@@ -1,7 +1,8 @@
+import { IconButton, Menu, MenuItem } from "@material-ui/core";
 import React, { useState } from "react";
-import Menu from "@mui/material/Menu";
-import MenuItem from "@mui/material/MenuItem";
-import { IconButton } from "@mui/material";
+// import Menu from "@material-ui/icons/Menu";
+// import MenuItem from "@mui/material/MenuItem";
+// import { IconButton } from "@mui/material";
 import { useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
 
@@ -18,7 +19,6 @@ export default function DropDown({ display }) {
   };
   const handleClose = () => {
     setAnchorEl(null);
-    history.push("/dashboard");
   };
 
   const logoutHandler = () => {
@@ -46,7 +46,9 @@ export default function DropDown({ display }) {
           "aria-labelledby": "basic-button",
         }}
       >
-        <MenuItem onClick={handleClose}>dashboard</MenuItem>
+        <MenuItem onClick={() => history.push("/dashboard")}>
+          Dashboard
+        </MenuItem>
         <MenuItem onClick={logoutHandler}>Logout</MenuItem>
       </Menu>
     </div>
