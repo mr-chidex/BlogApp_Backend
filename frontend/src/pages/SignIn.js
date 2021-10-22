@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
-import { TextField } from "@mui/material";
+import { TextField, CircularProgress } from "@mui/material";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Checkbox from "@material-ui/core/Checkbox";
 import Box from "@material-ui/core/Box";
@@ -10,6 +10,14 @@ import Typography from "@material-ui/core/Typography";
 import Container from "@material-ui/core/Container";
 import { createTheme, ThemeProvider } from "@material-ui/core/styles";
 import { makeStyles } from "@material-ui/core";
+import { Formik, Form, Field } from "formik";
+import * as yup from "yup";
+
+import Meta from "../components/Meta";
+
+const metaTags = {
+  title: "DBlog - Sign in form",
+};
 
 const theme = createTheme({
   palette: {
@@ -27,32 +35,43 @@ const useStyles = makeStyles({
     display: "grid",
     placeItems: "center",
     height: "100vh",
-    color: "#ffffff",
+    color: "#000",
   },
-  input: { backgroundColor: "#fff", border: "none", outline: "none" },
+  container: { padding: "1rem", backgroundColor: "#fff" },
+  submit: {
+    display: "block",
+    width: "100%",
+  },
+});
+
+const signinSchema = yup.object().shape({
+  email: yup.string().required().email().label("Email Address"),
+  password: yup.string().min(4).required().label("Password"),
 });
 
 const SignIn = () => {
   const classes = useStyles();
 
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [loading, setLoading] = useState(false);
+  const initialValues = {
+    email: "",
+    password: "",
+  };
 
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
-  const signinHandler = (e) => {
-    e.preventDefault();
+  const signinHandler = (values, helpers) => {
+    console.log(values);
+    helpers.setSubmitting(false);
   };
 
   return (
     <ThemeProvider theme={theme}>
-      {/* <Meta metaTags={metaTags} /> */}
+      <Meta metaTags={metaTags} />
       <Box>
         <Container component="main" className={classes.root} maxWidth="xs">
-          <div>
+          <div className={classes.container}>
             <Box
               sx={{
                 textAlign: "center",
@@ -69,50 +88,80 @@ const SignIn = () => {
                 Sign in
               </Typography>
             </Box>
-            <Box component="form">
-              <TextField
-                label="Email"
-                variant="outlined"
-                placeholder="Enter Email"
-                fullWidth
-                value={email}
-                name="email"
-                type="email"
-                onChange={(e) => setEmail(e.target.value)}
-                required
-                margin="normal"
-                autoComplete="email"
-                autoFocus
-                className={classes.input}
-              />
 
-              <TextField
-                margin="normal"
-                label="Password"
-                variant="outlined"
-                placeholder="Enter Password"
-                fullWidth
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-                type="password"
-                className={classes.input}
-              />
-              <FormControlLabel
-                control={<Checkbox value="remember" color="primary" />}
-                label="Remember me"
-              />
-              <Button
-                type="submit"
-                fullWidth
-                variant="contained"
-                color="primary"
-                disabled={loading}
-                onClick={signinHandler}
-              >
-                Sign In
-              </Button>
-            </Box>
+            <Formik
+              validateOnBlur
+              validateOnChange
+              validationSchema={signinSchema}
+              initialValues={initialValues}
+              onSubmit={(values, helpers) => signinHandler(values, helpers)}
+            >
+              {({
+                values,
+                errors,
+                touched,
+                handleBlur,
+                handleChange,
+                isSubmitting,
+              }) => (
+                <Box component="main">
+                  <Form noValidate>
+                    <Field
+                      error={errors.email && touched.email}
+                      helperText={errors.email}
+                      variant="outlined"
+                      type="email"
+                      margin="normal"
+                      required
+                      fullWidth
+                      label="Email"
+                      name="email"
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      as={TextField}
+                      value={values.email}
+                    />
+
+                    <Field
+                      error={errors.password && touched.password}
+                      helperText={errors.password}
+                      variant="outlined"
+                      type="password"
+                      margin="normal"
+                      required
+                      fullWidth
+                      label="Password"
+                      name="password"
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      as={TextField}
+                      value={values.password}
+                    />
+                    <FormControlLabel
+                      control={<Checkbox value="remember" color="primary" />}
+                      label="Remember me"
+                    />
+
+                    <Button
+                      type="submit"
+                      variant="contained"
+                      disabled={isSubmitting}
+                      color="primary"
+                      className={classes.submit}
+                      size="large"
+                    >
+                      {isSubmitting ? (
+                        <>
+                          <CircularProgress size="1rem" /> &nbsp;Submitting{" "}
+                        </>
+                      ) : (
+                        <> Submit</>
+                      )}
+                    </Button>
+                  </Form>
+                </Box>
+              )}
+            </Formik>
           </div>
         </Container>
       </Box>

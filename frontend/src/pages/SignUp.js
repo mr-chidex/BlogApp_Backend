@@ -42,15 +42,12 @@ const useStyles = makeStyles({
     display: "block",
     width: "100%",
   },
-  paper: {
-    padding: "1rem",
-  },
 });
 
 const signupSchema = yup.object().shape({
-  email: yup.string().required().label("Email Address"),
+  email: yup.string().email().required().label("Email Address"),
   password: yup.string().min(4).required().label("Password"),
-  name: yup.string().required().label("Full Name"),
+  name: yup.string().required().min(2).label("Full Name"),
 });
 
 const SignUp = () => {
@@ -66,7 +63,7 @@ const SignUp = () => {
     password: "",
   };
 
-  const signinHandler = (values, helpers) => {
+  const signupHandler = (values, helpers) => {
     console.log(values);
     helpers.setSubmitting(false);
   };
@@ -98,7 +95,7 @@ const SignUp = () => {
               validateOnChange
               validationSchema={signupSchema}
               initialValues={initialValues}
-              onSubmit={(values, helpers) => signinHandler(values, helpers)}
+              onSubmit={(values, helpers) => signupHandler(values, helpers)}
             >
               {({
                 values,
@@ -182,56 +179,6 @@ const SignUp = () => {
                 </Box>
               )}
             </Formik>
-
-            <Box component="form">
-              {/* <TextField
-                label="Full Name"
-                variant="outlined"
-                placeholder="Enter Name"
-                fullWidth
-                value={name}
-                name="name"
-                type="text"
-                onChange={(e) => setName(e.target.value)}
-                required
-                margin="normal"
-                autoFocus
-                className={classes.input}
-              /> */}
-
-              {/* <TextField
-                label="Email"
-                variant="outlined"
-                placeholder="Enter Email"
-                fullWidth
-                value={email}
-                name="email"
-                type="email"
-                onChange={(e) => setEmail(e.target.value)}
-                required
-                margin="normal"
-                autoComplete="email"
-                autoFocus
-                className={classes.input}
-              />
-
-              <TextField
-                margin="normal"
-                label="Password"
-                variant="outlined"
-                placeholder="Enter Password"
-                fullWidth
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-                type="password"
-                className={classes.input}
-              /> */}
-              {/* <FormControlLabel
-                control={<Checkbox value="remember" color="primary" />}
-                label="Remember me"
-              /> */}
-            </Box>
           </div>
         </Container>
       </Box>

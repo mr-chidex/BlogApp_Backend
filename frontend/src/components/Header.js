@@ -3,7 +3,7 @@ import { Container, makeStyles } from "@material-ui/core";
 import { NavLink } from "react-router-dom";
 import { IconButton, Avatar } from "@mui/material";
 import { Facebook, Instagram, Twitter } from "@material-ui/icons";
-
+import { useLocation } from "react-router-dom";
 import Logo from "./Logo";
 import DropDown from "./DropDown";
 
@@ -35,6 +35,9 @@ const useStyles = makeStyles({
 
 const Header = () => {
   const classes = useStyles();
+  const location = useLocation();
+
+  if (location?.pathname?.split("/")[1] === "dashboard") return null;
 
   return (
     <div className={classes.header}>
