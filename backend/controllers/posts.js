@@ -12,16 +12,21 @@ const io = require("../socket");
 //@Route    GET /api/posts/
 //@access   Public
 const getAllPosts = async (req, res, next) => {
-  const currentPage = req.query.page || 1;
-  const perPage = req.query.offset || 5;
-  const totalPost = await Posts.find().countDocuments();
-  const posts = await Posts.find()
+  const page = +req.query.page || 0;
+  const limit = +req.query.limit || 10;
+  const totalCount = await Posts.find().countDocuments();
+  const result = {};
+  const startIndex = page * limit;
+  result.totalCount = totalCount;
+  result.countPerPage = limit;
+
+  result.data = await Posts.find()
     .populate("author", "name -_id")
-    .skip((currentPage - 1) * perPage)
-    .limit(perPage)
+    .skip(startIndex)
+    .limit(limit)
     .sort({ _id: -1 });
 
-  res.json({ posts, totalPost });
+  res.json({ result });
 };
 
 //@desc     add new post
