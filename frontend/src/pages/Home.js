@@ -200,7 +200,7 @@ const Home = () => {
               </div>
             </Box>
 
-            {posts?.length === 0 ? (
+            {posts?.length > 0 ? (
               <div className="latest-news">
                 <div className="latest-news-header">
                   <NotesIcon className="icon" fontSize="large" />
