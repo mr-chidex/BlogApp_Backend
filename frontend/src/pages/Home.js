@@ -1,148 +1,278 @@
 import React, { useEffect, useState } from "react";
-// import openSocket from "socket.io-client";
-import { useDispatch, useSelector } from "react-redux";
+import {
+  Box,
+  Card,
+  CardActionArea,
+  CardMedia,
+  Chip,
+  Container,
+  Grid,
+  makeStyles,
+} from "@material-ui/core";
 
-import { getPostsAction, deletePostAction } from "../redux/actions/postActions";
-import Message from "../components/Message";
+import EventAvailableIcon from "@material-ui/icons/EventAvailable";
+import NotesIcon from "@material-ui/icons/Notes";
 
-const Home = ({ history }) => {
-  const [page, setPage] = useState(1);
-  const [alerts, setAlerts] = useState(false);
+import axios from "axios";
+import { useDispatch } from "react-redux";
+
+import { setSnackbar } from "../redux/actions/uiActions";
+import { useHistory, Link } from "react-router-dom";
+import PaginationTab from "../components/PaginationTab";
+import MediaCard from "../components/MediaCard";
+import SideBar from "../components/SideBar";
+
+const useStyles = makeStyles({
+  media: {
+    backgroundColor: "rgba(0,0,0,0.5)",
+  },
+});
+
+const Home = () => {
+  const [page, setPage] = useState(0);
   const [posts, setPosts] = useState([]);
-
-  const defaultPosts = 5;
+  const [totalPage, setTotalPage] = useState(1);
+  const [countPerPage, setCountPerPage] = useState(1);
+  const [loading, setLoading] = useState(true);
   const dispatch = useDispatch();
-
-  const { user } = useSelector((state) => state.userData);
-  const {
-    posts: apiPosts,
-    loading,
-    totalPost,
-    error,
-    message,
-  } = useSelector((state) => state.blogPost);
-
-  const lastPage = totalPost && Math.ceil(totalPost / 5);
+  const history = useHistory();
+  const defaultPosts = 5;
+  const limit = 20;
+  const classes = useStyles();
 
   useEffect(() => {
-    if (apiPosts) {
-      setPosts(apiPosts);
-    }
-  }, [apiPosts]);
+    (async () => {
+      try {
+        const { data } = await axios.get(
+          `${process.env.REACT_APP_BLOG_API}/api/posts?page=${page}&limit=${limit}`
+        );
+        console.log(data?.result?.data);
+        setPosts(data?.result?.data);
+        setTotalPage(data?.result?.totalCount);
+        setCountPerPage(data?.result?.countPerPage);
+        setLoading(false);
+      } catch (error) {
+        error.response && error.response.data.message
+          ? dispatch(setSnackbar(error.response.data.message, "error"))
+          : dispatch(setSnackbar(error.message, "error"));
 
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, [page]);
+        setLoading(false);
+      }
+    })();
+  }, [dispatch, page]);
 
-  useEffect(() => {
-    dispatch(getPostsAction(page));
-    setAlerts(true);
-  }, [page, dispatch]);
-
-  const deletePost = async (postId) => {
-    setPosts((prev) => prev.filter((post) => post._id !== postId));
-    dispatch(deletePostAction(postId));
-    setAlerts(true);
+  const mainFeaturedPost = {
+    title:
+      "Naira crashes to record N557/$1 at black market as demand pressure worsens",
+    description:
+      "Multiple lines of text that form the lede, informing new readers quickly and efficiently about what's most interesting in this post's contents.",
+    image: "https://source.unsplash.com/random",
+    imageText: "main image description",
+    linkText: "Continue reading…",
+    category: "business",
+    url: "/naira-crashes-to-record",
   };
 
-  const paginationHandler = (index) => {
-    setPage(index + 1);
-  };
+  const newsData = [
+    {
+      title:
+        "Naira crashes to record 1/$1 at black market as demand pressure worsens",
+      description: `Cras mattis consectetur purus sit amet fermentum.
+        Cras justo odio, dapibus ac facilisis in, egestas
+        eget quam. Mor`,
+      image: "https://picsum.photos/250/300",
+      author: "Harry",
+      date: "Dec 23, 2021",
+      category: "market",
+      url: "Naira-crashes-to-record",
+      id: 1,
+    },
+    {
+      title:
+        "BTC crashes to record N557/$1 at black market as demand pressure worsens",
+      description: `Cras mattis consectetur purus sit amet fermentum.
+        Cras justo odio, dapibus ac facilisis in, egestas
+        eget quam. Mor`,
+      image: "https://picsum.photos/150/200",
+      author: "Harry",
+      date: "Dec 23, 2021",
+      category: "business",
+      url: "Naira-crashes-to-record",
+      id: 2,
+    },
+    {
+      title:
+        "Naira crashes to record 1/$1 at black market as demand pressure worsens",
+      description: `Cras mattis consectetur purus sit amet fermentum.
+        Cras justo odio, dapibus ac facilisis in, egestas
+        eget quam. Mor`,
+      image: "https://picsum.photos/250/350",
+      author: "Harry",
+      date: "Dec 23, 2021",
+      category: "economy",
+      url: "Naira-crashes-to-record",
+      id: 3,
+    },
+    {
+      title:
+        "BTC crashes to record N557/$1 at black market as demand pressure worsens",
+      description: `Cras mattis consectetur purus sit amet fermentum.
+        Cras justo odio, dapibus ac facilisis in, egestas
+        eget quam. Mor`,
+      image: "https://picsum.photos/180/320",
+      author: "Harry",
+      date: "Dec 23, 2021",
+      category: "economy",
+      url: "Naira-crashes-to-record",
+      id: 4,
+    },
+    {
+      title:
+        "BTC crashes to record N557/$1 at black market as demand pressure worsens",
+      description: `Cras mattis consectetur purus sit amet fermentum.
+        Cras justo odio, dapibus ac facilisis in, egestas
+        eget quam. Mor`,
+      image: "https://picsum.photos/160/370",
+      author: "Harry",
+      date: "Dec 23, 2021",
+      category: "business",
+      url: "Naira-crashes-to-record",
+      id: 5,
+    },
+    {
+      title:
+        "BTC crashes to record N557/$1 at black market as demand pressure worsens",
+      description: `Cras mattis consectetur purus sit amet fermentum.
+        Cras justo odio, dapibus ac facilisis in, egestas
+        eget quam. Mor`,
+      image: "https://picsum.photos/120/340",
+      author: "Harry",
+      date: "Dec 23, 2021",
+      category: "business",
+      url: "Naira-crashes-to-record",
+      id: 6,
+    },
+    {
+      title:
+        "BTC crashes to record N557/$1 at black market as demand pressure worsens",
+      description: `Cras mattis consectetur purus sit amet fermentum.
+        Cras justo odio, dapibus ac facilisis in, egestas
+        eget quam. Mor`,
+      image: "https://picsum.photos/180/370",
+      author: "Harry",
+      date: "Dec 23, 2021",
+      category: "business",
+      url: "Naira-crashes-to-record",
+      id: 7,
+    },
+  ];
 
   return (
-    <>
-      <div className="hero-container mb-3">
-        <div className="hero"></div>
-        <div className="text-center my-3 header-hero">
-          <h2>Get the best news in a split second &#128513;.</h2>
-          <h3>A Home away from home</h3>
-        </div>
-      </div>
-
-      <main className="container-lg main">
-        {user?.name && (
-          <button
-            onClick={() => history.push("/new")}
-            className="btn btn-success d-inline-block me-auto mb-4"
-          >
-            NEW POST
-          </button>
-        )}
-
-        {loading && (
-          <div className="default">
-            {[...Array(defaultPosts)].map((post, index) => (
-              <div className="defaultPost" key={index}></div>
-            ))}
-          </div>
-        )}
-
-        {alerts && error && <Message status="error">{message}</Message>}
-
-        {posts?.length > 0
-          ? posts.map((post) => (
-              <div className="card my-4" key={post._id}>
-                <div className="card-body">
-                  <small>
-                    Posted by {post.author.name} on{" "}
-                    {new Date(post.createdAt).toLocaleDateString()}
-                  </small>
-                  <h1>{post.title}</h1>
-                  <div className="w-25 image-container  ">
-                    <img
-                      src={post.image?.url}
-                      alt={post.title}
-                      className="rounded img-fluid mx-auto d-inline-block"
-                    />
+    <main className="home">
+      <Container maxWidth="lg">
+        <Grid container spacing={3}>
+          <Grid item xs={12} md={8}>
+            <Box
+              sx={{
+                backgroundColor: "grey.800",
+                color: "#fff",
+                height: "400px",
+                width: "100%",
+                mb: 4,
+                backgroundSize: "cover",
+                backgroundRepeat: "no-repeat",
+                backgroundPosition: "center",
+                backgroundImage: `url(${mainFeaturedPost?.image})`,
+              }}
+              className="featured-news"
+            >
+              <div className="featured-content">
+                <div className="featured-news-content">
+                  <h1>{mainFeaturedPost.title}</h1>
+                  <div className="featured-news-content__timer">
+                    <span className="name">By: Mr-Chidex</span>{" "}
+                    <EventAvailableIcon className="icon" fontSize="small" />{" "}
+                    <span>Dec 23, 2021</span>
                   </div>
-                  <p>{post.content.substring(0, 400)}...</p>
-                </div>
-
-                <div className=" w-100 mb-3 mx-1">
-                  <button
-                    onClick={() => history.push(`/post/${post._id}`)}
-                    className="btn btn-info btn-sm mx-1 px-3"
-                  >
-                    Read More...
-                  </button>
-                  {user?.name && (
-                    <>
-                      <button
-                        className="btn btn-secondary btn-sm px-3 mx-2"
-                        onClick={() =>
-                          history.push(`/new/${post._id}?edit=true`)
-                        }
-                      >
-                        Edit
-                      </button>
-                      <button
-                        className="btn btn-danger px-3 btn-sm mx-1"
-                        onClick={() => deletePost(post._id)}
-                      >
-                        Delete
-                      </button>
-                    </>
-                  )}
+                  <p>{mainFeaturedPost.description.substr(0, 200)}...</p>
+                  <Link to={`/2323384y384`}>{mainFeaturedPost.linkText}</Link>
                 </div>
               </div>
-            ))
-          : !loading && <h1>No available posts</h1>}
+            </Box>
 
-        <nav aria-label="Page navigation example">
-          <ul className="pagination  justify-content-center">
-            {[...Array(lastPage)].map((page, index) => (
-              <button
-                className="page-link btn-sm"
-                key={index}
-                onClick={() => paginationHandler(index)}
-              >
-                {index + 1}
-              </button>
-            ))}
-          </ul>
-        </nav>
-      </main>
-    </>
+            <div className="latest-news">
+              <div className="latest-news-header">
+                <NotesIcon className="icon" fontSize="large" />
+                <h1>Recent Posts</h1>
+              </div>
+
+              {posts?.map((post) => (
+                <Card
+                  key={post?.id}
+                  className="latest-news-card"
+                  onClick={() => history.push(`/${post?._id}`)}
+                >
+                  <CardActionArea>
+                    <div className="latest-news-content">
+                      <div className="info">
+                        <h3>{post.title}</h3>
+                        <div className="featured-news-content__timer">
+                          <span className="name">By: {post?.author?.name}</span>{" "}
+                          <EventAvailableIcon
+                            className="icon"
+                            fontSize="small"
+                          />{" "}
+                          <span>
+                            {new Date(post.createdAt).toLocaleDateString()}
+                          </span>
+                        </div>
+                        <p>{post?.content?.substring(0, 400)}...</p>
+                      </div>
+
+                      <div className="image-container">
+                        <CardMedia
+                          className={classes.media}
+                          image={post?.image?.url}
+                          title="Live from space album cover"
+                          component="img"
+                        />
+                      </div>
+                    </div>
+                  </CardActionArea>
+                </Card>
+              ))}
+
+              <PaginationTab
+                totalPage={totalPage}
+                countPerPage={countPerPage}
+                page={page}
+              />
+            </div>
+
+            {/***weekly top */}
+            <div className="latest-news spotlight-news">
+              <div className="latest-news-header">
+                <NotesIcon className="icon" fontSize="large" />
+                <h1>weekly top</h1>
+              </div>
+
+              <div className="spotlight-news__content">
+                {newsData?.map((post, index) => (
+                  <MediaCard key={index} post={post} />
+                ))}
+              </div>
+
+              <PaginationTab />
+            </div>
+          </Grid>
+
+          {/**Side Bar */}
+          <Grid item md={4} xs={12}>
+            <SideBar />
+          </Grid>
+        </Grid>
+      </Container>
+    </main>
   );
 };
 

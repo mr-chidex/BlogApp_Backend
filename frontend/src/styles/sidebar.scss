@@ -1,0 +1,29 @@
+.side-bar {
+  position: sticky;
+  top: 20px;
+
+  h1 {
+    background-color: $primary;
+    color: $white;
+    margin-bottom: 0.5rem;
+    padding: 0.5rem;
+    font-size: 1rem;
+    text-transform: uppercase;
+  }
+
+  a {
+    margin-top: 0.7rem;
+    display: inline-block;
+  }
+  p {
+    display: flex;
+    align-items: center;
+    margin: 0.2rem 0;
+    cursor: pointer;
+    font-size: 0.78rem;
+
+    .arrow {
+      color: $primary;
+    }
+  }
+}

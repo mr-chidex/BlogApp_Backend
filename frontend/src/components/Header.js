@@ -67,8 +67,12 @@ const Header = () => {
           <Logo />
 
           <div className={classes.left}>
+            <NavLink className={classes.links} to="/signup">
+              signup
+            </NavLink>
+
             <NavLink className={classes.links} to="/signin">
-              Signin
+              signin
             </NavLink>
 
             <DropDown display={<Avatar />} />

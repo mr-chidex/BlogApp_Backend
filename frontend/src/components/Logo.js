@@ -8,9 +8,9 @@ const useStyles = makeStyles({
     textDecoration: "none",
   },
   title: {
-    color: "yellow",
+    color: "#f8633b",
   },
-  sub: { color: "red" },
+  sub: { color: "#ffff" },
 });
 
 const Logo = () => {
@@ -19,7 +19,7 @@ const Logo = () => {
   return (
     <Link to="/" className={classes.link}>
       <h1 className={classes.title}>
-        CH<span className={classes.sub}>INE</span>WS
+        DB<span className={classes.sub}>log</span>
       </h1>
     </Link>
   );

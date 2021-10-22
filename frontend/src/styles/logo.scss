@@ -1,0 +1,10 @@
+.logo_title {
+  text-transform: capitalize;
+  color: $light;
+  font-size: 3rem;
+  font-style: italic;
+  .subtitle {
+    font-size: 1.3rem;
+    // color: $white;
+  }
+}

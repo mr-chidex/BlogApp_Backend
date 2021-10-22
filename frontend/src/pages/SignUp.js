@@ -1,103 +1,137 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
+import Avatar from "@material-ui/core/Avatar";
+import Button from "@material-ui/core/Button";
+import { TextField } from "@mui/material";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import Checkbox from "@material-ui/core/Checkbox";
+import Box from "@material-ui/core/Box";
+import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
+import Typography from "@material-ui/core/Typography";
+import Container from "@material-ui/core/Container";
+import { createTheme, ThemeProvider } from "@material-ui/core/styles";
+import { makeStyles } from "@material-ui/core";
 
-import { userSignupAction } from "../redux/actions/userActions";
-import Message from "../components/Message";
+const theme = createTheme({
+  palette: {
+    primary: {
+      main: "#f75050",
+    },
+    secondary: {
+      main: "#f75050",
+    },
+  },
+});
+
+const useStyles = makeStyles({
+  root: {
+    display: "grid",
+    placeItems: "center",
+    height: "100vh",
+    color: "#ffffff",
+  },
+  input: { backgroundColor: "#fff", border: "none", outline: "none" },
+});
 
 const SignUp = () => {
-  const [name, setName] = useState("");
+  const classes = useStyles();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [alerts, setAlerts] = useState(false);
-
-  const dispatch = useDispatch();
-  const { loading, message, error, success } = useSelector(
-    (state) => state.userLogin
-  );
+  const [name, setName] = useState("");
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
-  const submitsignupHandler = async (e) => {
+  const signinHandler = (e) => {
     e.preventDefault();
-    const user = { name, email, password };
-    dispatch(userSignupAction(user));
-    setAlerts(true);
   };
 
   return (
-    <main className="container-lg main">
-      <div>
-        <h1 className="jumbotron display-4 text-center">Welcome!!</h1>
-        <div className="w-75 mx-auto">
-          {alerts && success && <Message status="success">{message}</Message>}
-          {alerts && error && <Message status="error">{message}</Message>}
-          <form>
-            <div className="form-group">
-              <label htmlFor="name">Name:</label>
-              <input
-                type="text"
-                className="form-control"
+    <ThemeProvider theme={theme}>
+      {/* <Meta metaTags={metaTags} /> */}
+      <Box>
+        <Container component="main" className={classes.root} maxWidth="xs">
+          <div>
+            <Box
+              sx={{
+                textAlign: "center",
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+              }}
+              onSubmit={signinHandler}
+            >
+              <Avatar style={{ backgroundColor: "#f75050" }} color="primary">
+                <LockOutlinedIcon />
+              </Avatar>
+              <Typography component="h1" variant="h5">
+                Sign Up
+              </Typography>
+            </Box>
+            <Box component="form">
+              <TextField
+                label="Full Name"
+                variant="outlined"
                 placeholder="Enter Name"
-                id="name"
-                required
+                fullWidth
                 value={name}
-                onChange={(e) => setName(e.target.value)}
                 name="name"
+                type="text"
+                onChange={(e) => setName(e.target.value)}
+                required
+                margin="normal"
+                autoFocus
+                className={classes.input}
               />
-            </div>
-            <div className="form-group">
-              <label htmlFor="email">Email:</label>
-              <input
-                type="email"
-                className="form-control"
-                placeholder="Enter Email"
-                id="email"
-                name="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-              />
-            </div>
 
-            <div className="form-group">
-              <label htmlFor="password">Password:</label>
-              <input
-                type="password"
-                className="form-control"
+              <TextField
+                label="Email"
+                variant="outlined"
+                placeholder="Enter Email"
+                fullWidth
+                value={email}
+                name="email"
+                type="email"
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                margin="normal"
+                autoComplete="email"
+                autoFocus
+                className={classes.input}
+              />
+
+              <TextField
+                margin="normal"
+                label="Password"
+                variant="outlined"
                 placeholder="Enter Password"
-                id="password"
-                name="password"
+                fullWidth
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
+                required
+                type="password"
+                className={classes.input}
               />
-            </div>
-            <p>
-              Already have an account? <Link to="/signin">Signin</Link>
-            </p>
-            {loading ? (
-              <button
+              <FormControlLabel
+                control={<Checkbox value="remember" color="primary" />}
+                label="Remember me"
+              />
+              <Button
                 type="submit"
-                onClick={submitsignupHandler}
-                className="btn btn"
-                disabled
-              >
-                Signing Up...
-              </button>
-            ) : (
-              <button
-                type="submit"
-                onClick={submitsignupHandler}
-                className="btn btn-primary"
+                fullWidth
+                variant="contained"
+                color="primary"
+                disabled={loading}
+                onClick={signinHandler}
               >
                 Sign Up
-              </button>
-            )}
-          </form>
-        </div>
-      </div>
-    </main>
+              </Button>
+            </Box>
+          </div>
+        </Container>
+      </Box>
+    </ThemeProvider>
   );
 };
 

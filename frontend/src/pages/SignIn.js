@@ -1,100 +1,122 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-import { useHistory } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
+import Avatar from "@material-ui/core/Avatar";
+import Button from "@material-ui/core/Button";
+import { TextField } from "@mui/material";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import Checkbox from "@material-ui/core/Checkbox";
+import Box from "@material-ui/core/Box";
+import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
+import Typography from "@material-ui/core/Typography";
+import Container from "@material-ui/core/Container";
+import { createTheme, ThemeProvider } from "@material-ui/core/styles";
+import { makeStyles } from "@material-ui/core";
 
-import Message from "../components/Message";
-import { userLoginAction } from "../redux/actions/userActions";
+const theme = createTheme({
+  palette: {
+    primary: {
+      main: "#f75050",
+    },
+    secondary: {
+      main: "#f75050",
+    },
+  },
+});
+
+const useStyles = makeStyles({
+  root: {
+    display: "grid",
+    placeItems: "center",
+    height: "100vh",
+    color: "#ffffff",
+  },
+  input: { backgroundColor: "#fff", border: "none", outline: "none" },
+});
 
 const SignIn = () => {
+  const classes = useStyles();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [alerts, setAlerts] = useState(false);
-  const history = useHistory();
-
-  const dispatch = useDispatch();
-  const { user, message, error, loading } = useSelector(
-    (state) => state.userLogin
-  );
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
-  const submitSigninHandler = async (e) => {
+  const signinHandler = (e) => {
     e.preventDefault();
-    dispatch(userLoginAction({ email, password }));
-    setAlerts(true);
   };
 
-  useEffect(() => {
-    if (user?._id) {
-      history.push("/join");
-    }
-  }, [history, user]);
-
   return (
-    <main className="container-lg main">
-      <div>
-        <h1 className="jumbotron display-4 text-center">Welcome Back</h1>
-        <div className="w-75 mx-auto">
-          <div className="alert alert-info text-dark" role="alert">
-            test-email: <strong>test@email.com </strong>, test-pass:{" "}
-            <strong>1234</strong>
-          </div>
-          {user && <Message status="success">signed in successfully</Message>}
-          {alerts && error && <Message status="error">{message}</Message>}
-          <form>
-            <div className="form-group">
-              <label htmlFor="email">Email:</label>
-              <input
-                type="email"
-                className="form-control"
+    <ThemeProvider theme={theme}>
+      {/* <Meta metaTags={metaTags} /> */}
+      <Box>
+        <Container component="main" className={classes.root} maxWidth="xs">
+          <div>
+            <Box
+              sx={{
+                textAlign: "center",
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+              }}
+              onSubmit={signinHandler}
+            >
+              <Avatar style={{ backgroundColor: "#f75050" }} color="primary">
+                <LockOutlinedIcon />
+              </Avatar>
+              <Typography component="h1" variant="h5">
+                Sign in
+              </Typography>
+            </Box>
+            <Box component="form">
+              <TextField
+                label="Email"
+                variant="outlined"
                 placeholder="Enter Email"
-                id="email"
-                name="email"
+                fullWidth
                 value={email}
+                name="email"
+                type="email"
                 onChange={(e) => setEmail(e.target.value)}
+                required
+                margin="normal"
+                autoComplete="email"
+                autoFocus
+                className={classes.input}
               />
-            </div>
 
-            <div className="form-group">
-              <label htmlFor="password">Password:</label>
-              <input
-                type="password"
-                className="form-control"
+              <TextField
+                margin="normal"
+                label="Password"
+                variant="outlined"
                 placeholder="Enter Password"
-                id="password"
-                name="password"
+                fullWidth
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
+                required
+                type="password"
+                className={classes.input}
               />
-            </div>
-            <p>
-              Don't have an accout? <Link to="signup">Signup</Link>{" "}
-            </p>
-            {loading ? (
-              <button
+              <FormControlLabel
+                control={<Checkbox value="remember" color="primary" />}
+                label="Remember me"
+              />
+              <Button
                 type="submit"
-                onClick={submitSigninHandler}
-                className="btn btn-primary"
-                disabled
-              >
-                Signing In...
-              </button>
-            ) : (
-              <button
-                type="submit"
-                onClick={submitSigninHandler}
-                className="btn btn-primary"
+                fullWidth
+                variant="contained"
+                color="primary"
+                disabled={loading}
+                onClick={signinHandler}
               >
                 Sign In
-              </button>
-            )}
-          </form>
-        </div>
-      </div>
-    </main>
+              </Button>
+            </Box>
+          </div>
+        </Container>
+      </Box>
+    </ThemeProvider>
   );
 };
 

@@ -5,7 +5,7 @@ import ArrowRightIcon from "@material-ui/icons/ArrowRight";
 const SideBar = () => {
   return (
     <div className="side-bar">
-      <h1>Hot News</h1>
+      <h1>Latest </h1>
       {[...Array(6)].map((_, index) => (
         <Link key={index} to="/" p>
           <p>
@@ -17,7 +17,7 @@ const SideBar = () => {
         </Link>
       ))}
 
-      <h1>Lead Stories</h1>
+      <h1>Spotlight</h1>
       {[...Array(4)].map((_, index) => (
         <Link key={index} to="/">
           <p>

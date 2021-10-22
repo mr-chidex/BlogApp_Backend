@@ -1,0 +1,98 @@
+.single-post {
+  margin-bottom: 3rem;
+  .title {
+    margin: 1rem 0 0.5rem;
+    font-size: clamp(1.5rem, 2vw, 2rem);
+    color: $primary;
+  }
+
+  h2 {
+    font-size: clamp(1.3rem, 2vw, 1.5rem);
+  }
+
+  .author {
+    display: flex;
+    align-items: center;
+    font-size: 0.9rem;
+    color: $paragraph;
+    margin: 1rem 0;
+
+    span {
+      color: $primary;
+      font-weight: 300;
+    }
+  }
+
+  .share-btns {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+
+    @media (min-width: 768px) {
+      justify-content: center;
+
+      & > * {
+        margin: 0 1rem;
+      }
+    }
+  }
+
+  .content {
+    margin: 1rem 0;
+  }
+
+  .comments {
+    h2 {
+      margin-top: 3rem;
+      display: flex;
+      align-items: center;
+      span {
+        color: $white;
+        background-color: $primary;
+        display: inline-block;
+        padding: 0.1rem 0.5rem;
+        font-size: 0.9rem;
+        margin-left: 0.4rem;
+        border-radius: 50%;
+      }
+    }
+
+    &-content {
+      margin: 1rem 0;
+
+      &-card {
+        display: flex;
+        align-items: center;
+        padding: 0 1rem;
+
+        .userIcon {
+          color: $paragraph;
+        }
+        .name {
+          font-size: 0.9rem;
+          color: $primary;
+          font-weight: 300;
+        }
+
+        .date {
+          color: $paragraph;
+          font-weight: 300;
+          margin: 0.3rem 0;
+        }
+      }
+    }
+  }
+
+  .reply {
+    margin: 3rem 0;
+    .input {
+      margin: 0.6rem 0;
+      background-color: $white;
+    }
+
+    .post-comment {
+      color: $white;
+      background-color: $primary;
+    }
+  }
+}
