@@ -12,7 +12,8 @@ import { createTheme, ThemeProvider } from "@material-ui/core/styles";
 import { makeStyles } from "@material-ui/core";
 import { Formik, Form, Field } from "formik";
 import * as yup from "yup";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { useHistory } from "react-router-dom";
 
 import Meta from "../components/Meta";
 import { userLoginAction } from "../redux/actions/userActions";
@@ -54,6 +55,16 @@ const signinSchema = yup.object().shape({
 const SignIn = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
+  const history = useHistory();
+
+  const { isAuth } = useSelector((state) => state.userData);
+
+  useEffect(() => {
+    if (isAuth) {
+      history.push("/dashboard");
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isAuth]);
 
   const initialValues = {
     email: "",

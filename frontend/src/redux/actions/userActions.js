@@ -15,13 +15,12 @@ import { SET_SNACKBAR } from "../constants/uiConstants";
 
 export const userSignupAction = (user, helpers) => async (dispatch) => {
   try {
-    const { name, email, password } = user;
     dispatch({ type: USER_SIGNUP_REQUEST });
 
     const { data } = await axios({
       url: `${process.env.REACT_APP_BLOG_API}/api/users/signup`,
       method: "POST",
-      data: { email, password, name },
+      data: user,
     });
 
     dispatch({
@@ -65,14 +64,13 @@ export const userSignupAction = (user, helpers) => async (dispatch) => {
 
 export const userLoginAction =
   (values, helpers) => async (dispatch, getState) => {
-    const { email, password } = values;
     try {
       dispatch({ type: USER_LOGIN_REQUEST });
 
       const { data } = await axios({
         url: `${process.env.REACT_APP_BLOG_API}/api/users/signin`,
         method: "POST",
-        data: { email, password },
+        data: values,
       });
 
       dispatch({
@@ -80,10 +78,8 @@ export const userLoginAction =
         payload: data,
       });
 
-      localStorage.setItem(
-        "USER_TOKEN",
-        JSON.stringify(getState().userLogin.user)
-      );
+      setAuthorizationHeader(data.token);
+      localStorage.setItem("USER_TOKEN", data.token);
     } catch (error) {
       dispatch({
         type: USER_LOGIN_FAILED,

@@ -160,7 +160,7 @@ const SignUp = () => {
                       control={<Checkbox value="remember" color="primary" />}
                       label="Remember me"
                     />
-                    {console.log(isSubmitting)}
+
                     <Button
                       type="submit"
                       variant="contained"
