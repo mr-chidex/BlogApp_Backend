@@ -1,9 +1,7 @@
 import {
-  Breadcrumbs,
   Container,
   Grid,
   Box,
-  makeStyles,
   Card,
   CardContent,
   Typography,
@@ -14,7 +12,6 @@ import {
 import PersonPinIcon from "@material-ui/icons/PersonPin";
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { Link } from "react-router-dom";
 import {
   FacebookShareButton,
   TelegramShareButton,
@@ -37,14 +34,7 @@ import { setSnackbar } from "../redux/actions/uiActions";
 import SideBar from "../components/SideBar";
 import Loader from "../components/Loader";
 
-const useStyles = makeStyles({
-  breadCrumb: {
-    fontSize: "0.8rem",
-  },
-});
-
 const SinglePost = () => {
-  const classes = useStyles();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [comment, setComment] = useState("");

@@ -11,7 +11,9 @@ import {
   SET_USER,
 } from "../constants/userConstants";
 
-export const userSignupAction = (user) => async (dispatch) => {
+import { SET_SNACKBAR } from "../constants/uiConstants";
+
+export const userSignupAction = (user, helpers) => async (dispatch) => {
   try {
     const { name, email, password } = user;
     dispatch({ type: USER_SIGNUP_REQUEST });
@@ -26,6 +28,16 @@ export const userSignupAction = (user) => async (dispatch) => {
       type: USER_SIGNUP_SUCCESS,
       payload: data,
     });
+
+    dispatch({
+      type: SET_SNACKBAR,
+      payload: {
+        snackBarMessage: "Signup successful",
+        snackBarType: "success",
+      },
+    });
+
+    helpers.setSubmitting(false);
   } catch (error) {
     dispatch({
       type: USER_SIGNUP_FAILED,
@@ -34,6 +46,19 @@ export const userSignupAction = (user) => async (dispatch) => {
           ? error.response.data.message
           : error.message,
     });
+
+    dispatch({
+      type: SET_SNACKBAR,
+      payload: {
+        snackBarMessage:
+          error.response && error.response.data.message
+            ? error.response.data.message
+            : error.message,
+        snackBarType: "error",
+      },
+    });
+
+    helpers.setSubmitting(false);
   }
 };
 

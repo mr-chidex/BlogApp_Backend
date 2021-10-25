@@ -12,8 +12,10 @@ import { createTheme, ThemeProvider } from "@material-ui/core/styles";
 import { makeStyles } from "@material-ui/core";
 import { Formik, Form, Field } from "formik";
 import * as yup from "yup";
+import { useDispatch } from "react-redux";
 
 import Meta from "../components/Meta";
+import { userSignupAction } from "../redux/actions/userActions";
 
 const metaTags = {
   title: "DBlog - Sign up form",
@@ -52,6 +54,7 @@ const signupSchema = yup.object().shape({
 
 const SignUp = () => {
   const classes = useStyles();
+  const dispatch = useDispatch();
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -64,8 +67,7 @@ const SignUp = () => {
   };
 
   const signupHandler = (values, helpers) => {
-    console.log(values);
-    helpers.setSubmitting(false);
+    dispatch(userSignupAction(values, helpers));
   };
 
   return (
@@ -158,12 +160,12 @@ const SignUp = () => {
                       control={<Checkbox value="remember" color="primary" />}
                       label="Remember me"
                     />
-
+                    {console.log(isSubmitting)}
                     <Button
                       type="submit"
                       variant="contained"
-                      disabled={isSubmitting}
                       color="primary"
+                      disabled={isSubmitting}
                       className={classes.submit}
                       size="large"
                     >
