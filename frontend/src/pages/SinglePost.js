@@ -30,7 +30,7 @@ import ShareIcon from "@material-ui/icons/Share";
 import { useDispatch } from "react-redux";
 import axios from "axios";
 
-import { setSnackbar } from "../redux/actions/uiActions";
+// import { setSnackbar } from "../redux/actions/uiActions";
 import SideBar from "../components/SideBar";
 import Loader from "../components/Loader";
 
@@ -61,9 +61,9 @@ const SinglePost = () => {
         setPost(data?.post);
         setLoading(false);
       } catch (error) {
-        error.response && error.response.data.message
-          ? dispatch(setSnackbar(error.response.data.message, "error"))
-          : dispatch(setSnackbar(error.message, "error"));
+        // error.response && error.response.data.message
+        //   ? dispatch(setSnackbar(error.response.data.message, "error"))
+        //   : dispatch(setSnackbar(error.message, "error"));
 
         setLoading(false);
       }
@@ -136,80 +136,89 @@ const SinglePost = () => {
                 </TelegramShareButton>
               </div>
 
-              <div className="content">
-                <p>
-                  Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                  Consectetur aliquam, dolorum sunt corporis quam soluta harum
-                  quia repellendus accusantium doloremque nesciunt consequuntur
-                  impedit, totam explicabo, repudiandae atque! Laboriosam, vel
-                  assumenda! Lorem ipsum dolor sit amet, consectetur adipisicing
-                  elit. Consectetur aliquam, dolorum sunt corporis quam soluta
-                  harum quia repellendus accusantium doloremque nesciunt
-                  consequuntur impedit, totam explicabo, repudiandae atque!
-                  <i>Laboriosam, vel assumenda!</i>
-                </p>
-                <p style={{ margin: "1rem 0" }}>
-                  Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                  Consectetur aliquam, dolorum sunt corporis quam soluta harum
-                  quia repellendus accusantium doloremque nesciunt consequuntur
-                  <b> impedit, totam explicabo, repudiandae</b> atque!
-                  Laboriosam, vel assumenda! Lorem ipsum dolor sit amet,
-                  consectetur adipisicing elit. Consectetur aliquam, dolorum
-                  sunt corporis quam soluta harum quia repellendus accusantium
-                  doloremque nesciunt consequuntur impedit, totam explicabo,
-                  repudiandae atque! Laboriosam, vel assumenda!
-                </p>
+              {post?.content ? (
+                <div
+                  className="content"
+                  dangerouslySetInnerHTML={{ __html: post?.content }}
+                ></div>
+              ) : (
+                <div className="content">
+                  <p>
+                    Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+                    Consectetur aliquam, dolorum sunt corporis quam soluta harum
+                    quia repellendus accusantium doloremque nesciunt
+                    consequuntur impedit, totam explicabo, repudiandae atque!
+                    Laboriosam, vel assumenda! Lorem ipsum dolor sit amet,
+                    consectetur adipisicing elit. Consectetur aliquam, dolorum
+                    sunt corporis quam soluta harum quia repellendus accusantium
+                    doloremque nesciunt consequuntur impedit, totam explicabo,
+                    repudiandae atque!
+                    <i>Laboriosam, vel assumenda!</i>
+                  </p>
+                  <p style={{ margin: "1rem 0" }}>
+                    Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+                    Consectetur aliquam, dolorum sunt corporis quam soluta harum
+                    quia repellendus accusantium doloremque nesciunt
+                    consequuntur
+                    <b> impedit, totam explicabo, repudiandae</b> atque!
+                    Laboriosam, vel assumenda! Lorem ipsum dolor sit amet,
+                    consectetur adipisicing elit. Consectetur aliquam, dolorum
+                    sunt corporis quam soluta harum quia repellendus accusantium
+                    doloremque nesciunt consequuntur impedit, totam explicabo,
+                    repudiandae atque! Laboriosam, vel assumenda!
+                  </p>
 
-                <h2>What the Governor of Kaduna State is saying</h2>
-                <p style={{ margin: "1rem 0" }}>
-                  Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                  Consectetur aliquam, dolorum sunt corporis quam soluta harum
-                  quia repellendus accusantium doloremque nesciunt consequuntur
-                  impedit, totam explicabo, repudiandae atque! Laboriosam, vel
-                  assumenda! Lorem ipsum dolor sit amet, consectetur adipisicing
-                  elit. Consectetur aliquam, dolorum sunt corporis quam soluta
-                  harum quia repellendus accusantium doloremque nesciunt
-                  consequuntur impedit, totam explicabo, repudiandae atque!
-                  Laboriosam, vel assumenda!
-                </p>
-                <p style={{ margin: "1rem 0" }}>
-                  Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                  Consectetur aliquam, dolorum sunt corporis quam soluta harum
-                  quia repellendus accusantium doloremque nesciunt consequuntur
-                  impedit, totam explicabo, repudiandae atque! Laboriosam, vel
-                  assumenda! Lorem ipsum dolor sit amet, consectetur adipisicing
-                  elit. Consectetur aliquam, dolorum sunt corporis quam soluta
-                  harum quia repellendus accusantium doloremque nesciunt
-                  consequuntur impedit, totam explicabo, repudiandae atque!
-                  Laboriosam, vel assumenda!
-                </p>
-                <h2>What the Governor of Kaduna State is saying</h2>
-                <p style={{ margin: "1rem 0" }}>
-                  Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                  Consectetur aliquam, dolorum sunt corporis quam soluta harum
-                  quia repellendus accusantium doloremque nesciunt consequuntur
-                  impedit,{" "}
-                  <i>
-                    totam explicabo, repudiandae atque! Laboriosam, vel
-                    assumenda! Lorem ipsum dolor sit amet, consectetur
-                  </i>{" "}
-                  adipisicing elit. Consectetur aliquam, dolorum sunt corporis
-                  quam soluta harum quia repellendus accusantium doloremque
-                  nesciunt consequuntur impedit, totam explicabo, repudiandae
-                  atque! Laboriosam, vel assumenda!
-                </p>
-                <p style={{ margin: "1rem 0" }}>
-                  Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                  Consectetur aliquam, dolorum sunt corporis quam soluta harum
-                  quia repellendus accusantium doloremque nesciunt consequuntur
-                  impedit, totam explicabo, repudiandae atque! Laboriosam, vel
-                  assumenda! Lorem ipsum dolor sit amet, consectetur adipisicing
-                  elit. Consectetur aliquam, dolorum sunt corporis quam soluta
-                  harum quia repellendus accusantium doloremque nesciunt
-                  consequuntur impedit, totam explicabo, repudiandae atque!
-                  Laboriosam, vel assumenda!
-                </p>
-              </div>
+                  <h2>What the Governor of Kaduna State is saying</h2>
+                  <p style={{ margin: "1rem 0" }}>
+                    Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+                    Consectetur aliquam, dolorum sunt corporis quam soluta harum
+                    quia repellendus accusantium doloremque nesciunt
+                    consequuntur impedit, totam explicabo, repudiandae atque!
+                    Laboriosam, vel assumenda! Lorem ipsum dolor sit amet,
+                    consectetur adipisicing elit. Consectetur aliquam, dolorum
+                    sunt corporis quam soluta harum quia repellendus accusantium
+                    doloremque nesciunt consequuntur impedit, totam explicabo,
+                    repudiandae atque! Laboriosam, vel assumenda!
+                  </p>
+                  <p style={{ margin: "1rem 0" }}>
+                    Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+                    Consectetur aliquam, dolorum sunt corporis quam soluta harum
+                    quia repellendus accusantium doloremque nesciunt
+                    consequuntur impedit, totam explicabo, repudiandae atque!
+                    Laboriosam, vel assumenda! Lorem ipsum dolor sit amet,
+                    consectetur adipisicing elit. Consectetur aliquam, dolorum
+                    sunt corporis quam soluta harum quia repellendus accusantium
+                    doloremque nesciunt consequuntur impedit, totam explicabo,
+                    repudiandae atque! Laboriosam, vel assumenda!
+                  </p>
+                  <h2>What the Governor of Kaduna State is saying</h2>
+                  <p style={{ margin: "1rem 0" }}>
+                    Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+                    Consectetur aliquam, dolorum sunt corporis quam soluta harum
+                    quia repellendus accusantium doloremque nesciunt
+                    consequuntur impedit,{" "}
+                    <i>
+                      totam explicabo, repudiandae atque! Laboriosam, vel
+                      assumenda! Lorem ipsum dolor sit amet, consectetur
+                    </i>{" "}
+                    adipisicing elit. Consectetur aliquam, dolorum sunt corporis
+                    quam soluta harum quia repellendus accusantium doloremque
+                    nesciunt consequuntur impedit, totam explicabo, repudiandae
+                    atque! Laboriosam, vel assumenda!
+                  </p>
+                  <p style={{ margin: "1rem 0" }}>
+                    Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+                    Consectetur aliquam, dolorum sunt corporis quam soluta harum
+                    quia repellendus accusantium doloremque nesciunt
+                    consequuntur impedit, totam explicabo, repudiandae atque!
+                    Laboriosam, vel assumenda! Lorem ipsum dolor sit amet,
+                    consectetur adipisicing elit. Consectetur aliquam, dolorum
+                    sunt corporis quam soluta harum quia repellendus accusantium
+                    doloremque nesciunt consequuntur impedit, totam explicabo,
+                    repudiandae atque! Laboriosam, vel assumenda!
+                  </p>
+                </div>
+              )}
 
               <div className="comments">
                 <h2>

@@ -32,7 +32,7 @@ const MediaCard = ({ post }) => {
     <Card
       className={classes.root}
       sx={{ maxWidth: 345 }}
-      onClick={() => router.push(`/${post?.url}`)}
+      onClick={() => router.push(`/data/${post?.url}`)}
     >
       <CardActionArea>
         <CardMedia

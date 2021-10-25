@@ -5,8 +5,6 @@ const slugify = require("slugify");
 
 const cloudinary = require("../utils/cloudinary");
 const folderPath = require("../utils/folder");
-const io = require("../socket");
-// const deleteImage = require("../handlers/deleteImage");
 
 //@desc     get all post
 //@Route    GET /api/posts/
@@ -21,6 +19,29 @@ const getAllPosts = async (req, res, next) => {
   result.countPerPage = limit;
 
   result.data = await Posts.find()
+    .populate("author", "name -_id")
+    .skip(startIndex)
+    .limit(limit)
+    .sort({ _id: -1 });
+
+  res.json({ result });
+};
+
+//@desc     get all post by author
+//@Route    GET /api/posts/
+//@access   Public
+const getAllPostByAuthor = async (req, res, next) => {
+  const page = +req.query.page || 0;
+  const limit = +req.query.limit || 10;
+  const totalCount = await Posts.find({
+    author: req?.user?._id,
+  }).countDocuments();
+  const result = {};
+  const startIndex = page * limit;
+  result.totalCount = totalCount;
+  result.countPerPage = limit;
+
+  result.data = await Posts.find({ author: req?.user?._id })
     .populate("author", "name -_id")
     .skip(startIndex)
     .limit(limit)
@@ -44,23 +65,30 @@ const addNewPost = async (req, res, next) => {
 
   if (!req.file) return res.status(400).json({ message: "No image uploaded" });
 
-  const image = await cloudinary.v2.uploader.upload(req.file.path, {
-    folder: folderPath,
-  });
+  try {
+    const image = await cloudinary.v2.uploader.upload(req.file.path, {
+      folder: folderPath,
+    });
 
-  const post = await new Posts({
-    title,
-    content,
-    image: {
-      url: image.secure_url,
-      image_id: image.public_id?.split("/")[2],
-    },
-    author: req.user,
-    url: slugify(title, { lower: true, strict: true }),
-  });
-  await post.save();
-  io.getIO().emit("posts", { action: "CREATE_POST", post: post });
-  res.status(201).json({ message: "post created successfully", post });
+    const post = await new Posts({
+      title,
+      content,
+      image: {
+        url: image.secure_url,
+        image_id: image.public_id?.split("/")[2],
+      },
+      author: req.user,
+      url: slugify(title, { lower: true, strict: true }),
+    });
+
+    await post.save();
+
+    res.status(201).json({ message: "post created successfully", post });
+  } catch (error) {
+    res
+      .status(503)
+      .json({ message: "error uploading image. Check network and try again" });
+  }
 };
 
 //@desc     get single post
@@ -97,11 +125,17 @@ const deletePost = async (req, res, next) => {
       .status(401)
       .json({ message: "Unauthorized access deleting file" });
 
-  await cloudinary.v2.uploader.destroy(`${folderPath}/${post.image.image_Id}`);
+  try {
+    await cloudinary.v2.uploader.destroy(
+      `${folderPath}/${post.image.image_Id}`
+    );
+  } catch (error) {
+    return res
+      .status(503)
+      .json({ message: "error deleting image. Check network and try again." });
+  }
+
   await Posts.deleteOne({ _id: postId });
-
-  io.getIO().emit("posts", { action: "DELETE_POST", post: post });
-
   res.json({ message: "post deleted successfully" });
 };
 
@@ -131,7 +165,7 @@ const updatePost = async (req, res, next) => {
 
   if (post.author._id.toString() !== req.user._id.toString())
     return res
-      .status(401)
+      .status(403)
       .json({ message: "Unauthorized access updating file" });
 
   post.title = title;
@@ -155,8 +189,6 @@ const updatePost = async (req, res, next) => {
 
   await post.save();
 
-  io.getIO().emit("posts", { action: "UPDATE_POST", post: post });
-
   res.json({ message: "post updated successfully", post });
 };
 
@@ -166,4 +198,5 @@ module.exports = {
   getSinglePost,
   deletePost,
   updatePost,
+  getAllPostByAuthor,
 };

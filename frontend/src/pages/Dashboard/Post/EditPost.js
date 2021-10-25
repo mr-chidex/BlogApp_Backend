@@ -160,7 +160,7 @@ const EditPost = () => {
     } catch (error) {
       error.response && error.response.data.message
         ? dispatch(setSnackbar(error.response.data.message, "error"))
-        : dispatch(setSnackbar(error.message));
+        : dispatch(setSnackbar(error.message, "error"));
       helpers.setSubmitting(false);
     }
   };

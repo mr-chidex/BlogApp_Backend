@@ -17,6 +17,8 @@ const SideBar = () => {
         </Link>
       ))}
 
+      <div className="search-bar"></div>
+
       <h1>Spotlight</h1>
       {[...Array(4)].map((_, index) => (
         <Link key={index} to="/">

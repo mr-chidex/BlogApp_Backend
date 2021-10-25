@@ -10,6 +10,7 @@ const {
   getSinglePost,
   updatePost,
   deletePost,
+  getAllPostByAuthor,
 } = require("../controllers/posts");
 const imageUpload = require("../middlewares/multer");
 
@@ -18,6 +19,9 @@ router.route("/").get(getAllPosts);
 router
   .route("/")
   .post(imageUpload.single("image"), authUser, postValidator, addNewPost);
+
+router.get("/author", getAllPostByAuthor);
+
 router
   .route("/:postId")
   .get(getSinglePost)
