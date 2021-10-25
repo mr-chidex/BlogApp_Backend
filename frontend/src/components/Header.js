@@ -3,8 +3,9 @@ import { Container, makeStyles } from "@material-ui/core";
 import { NavLink } from "react-router-dom";
 import { IconButton, Avatar } from "@mui/material";
 import { Facebook, Instagram, Twitter } from "@mui/icons-material";
-// import { Facebook, Instagram, Twitter } from "@material-ui/icons";
 import { useLocation } from "react-router-dom";
+import { useSelector } from "react-redux";
+
 import Logo from "./Logo";
 import DropDown from "./DropDown";
 
@@ -41,6 +42,8 @@ const Header = () => {
   const classes = useStyles();
   const location = useLocation();
 
+  const { isAuth } = useSelector((state) => state.userData);
+
   if (location?.pathname?.split("/")[1] === "dashboard") return null;
 
   return (
@@ -74,15 +77,19 @@ const Header = () => {
           <Logo />
 
           <div className={classes.left}>
-            <NavLink className={classes.links} to="/signup">
-              signup
-            </NavLink>
+            {!isAuth && (
+              <NavLink className={classes.links} to="/signup">
+                signup
+              </NavLink>
+            )}
 
-            <NavLink className={classes.links} to="/signin">
-              signin
-            </NavLink>
+            {!isAuth && (
+              <NavLink className={classes.links} to="/signin">
+                signin
+              </NavLink>
+            )}
 
-            <DropDown display={<Avatar />} />
+            {isAuth && <DropDown display={<Avatar />} />}
           </div>
         </nav>
       </Container>

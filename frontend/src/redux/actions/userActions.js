@@ -1,4 +1,5 @@
 import axios from "axios";
+import jwtDecode from "jwt-decode";
 
 import {
   USER_LOGIN_FAILED,
@@ -62,47 +63,48 @@ export const userSignupAction = (user, helpers) => async (dispatch) => {
   }
 };
 
-export const userLoginAction =
-  (values, helpers) => async (dispatch, getState) => {
-    try {
-      dispatch({ type: USER_LOGIN_REQUEST });
+export const userLoginAction = (values, helpers) => async (dispatch) => {
+  try {
+    dispatch({ type: USER_LOGIN_REQUEST });
 
-      const { data } = await axios({
-        url: `${process.env.REACT_APP_BLOG_API}/api/users/signin`,
-        method: "POST",
-        data: values,
-      });
+    const { data } = await axios({
+      url: `${process.env.REACT_APP_BLOG_API}/api/users/signin`,
+      method: "POST",
+      data: values,
+    });
 
-      dispatch({
-        type: USER_LOGIN_SUCCESS,
-        payload: data,
-      });
+    setAuthorizationHeader(data.token);
+    localStorage.setItem("USER_TOKEN", data.token);
 
-      setAuthorizationHeader(data.token);
-      localStorage.setItem("USER_TOKEN", data.token);
-    } catch (error) {
-      dispatch({
-        type: USER_LOGIN_FAILED,
-        payload:
+    dispatch({
+      type: USER_LOGIN_SUCCESS,
+    });
+
+    const user = jwtDecode(data.token);
+    dispatch(setUser(user));
+  } catch (error) {
+    dispatch({
+      type: USER_LOGIN_FAILED,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    });
+
+    dispatch({
+      type: SET_SNACKBAR,
+      payload: {
+        snackBarMessage:
           error.response && error.response.data.message
             ? error.response.data.message
             : error.message,
-      });
+        snackBarType: "error",
+      },
+    });
 
-      dispatch({
-        type: SET_SNACKBAR,
-        payload: {
-          snackBarMessage:
-            error.response && error.response.data.message
-              ? error.response.data.message
-              : error.message,
-          snackBarType: "error",
-        },
-      });
-
-      helpers.setSubmitting(false);
-    }
-  };
+    helpers.setSubmitting(false);
+  }
+};
 
 export const setUser = (user) => {
   return {

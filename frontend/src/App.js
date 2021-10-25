@@ -21,11 +21,11 @@ import Post from "./pages/Dashboard/Post/Post";
 import Subscribers from "./pages/Dashboard/Subscribers/Subscribers";
 
 const App = () => {
-  const { user } = useSelector((state) => state.userData);
+  const { isAuth, user } = useSelector((state) => state.userData);
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (localStorage.H_TOKEN) {
+    if (localStorage.USER_TOKEN) {
       setAuthorizationHeader(localStorage.USER_TOKEN);
       try {
         const decodedToken = jwtDecode(localStorage.USER_TOKEN);
@@ -41,22 +41,35 @@ const App = () => {
         dispatch(userLogoutAction());
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch]);
 
   return (
     <div className="App">
       <Header />
       <Switch>
-        <Route exact path="/signup" component={SignUp} />
+        {!isAuth && <Route exact path="/signup" component={SignUp} />}
         <Route exact path="/signin" component={SignIn} />
-        <Route exact path="/dashboard" component={Dashboard} />
-        <Route exact path="/dashboard/post" component={Posts} />
-        <Route exact path="/dashboard/subscribers" component={Subscribers} />
-        <Route exact path="/dashboard/add-post" component={EditPost} />
-        <Route exact path="/dashboard/edit-post/:postId" component={EditPost} />
-        <Route exact path="/dashboard/post/:postId" component={Post} />
-        <Route exact path="/:postId" component={SinglePost} />
+        {isAuth && <Route exact path="/dashboard" component={Dashboard} />}
+        {isAuth && <Route exact path="/dashboard/post" component={Posts} />}
+        {user?.admin && (
+          <Route exact path="/dashboard/subscribers" component={Subscribers} />
+        )}
+        {isAuth && (
+          <Route exact path="/dashboard/add-post" component={EditPost} />
+        )}
+        {isAuth && (
+          <Route
+            exact
+            path="/dashboard/edit-post/:postId"
+            component={EditPost}
+          />
+        )}
+        {isAuth && (
+          <Route exact path="/dashboard/post/:postId" component={Post} />
+        )}
         <Route exact path="/" component={Home} />
+        <Route exact path="/:url/:postId" component={SinglePost} />
         <Redirect to="/" />
       </Switch>
       <Footer />

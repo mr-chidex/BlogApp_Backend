@@ -197,7 +197,9 @@ const Home = () => {
                     <span>Dec 23, 2021</span>
                   </div>
                   <p>{mainFeaturedPost.description.substr(0, 200)}...</p>
-                  <Link to={`/2323384y384`}>{mainFeaturedPost.linkText}</Link>
+                  <Link to={`/post/2323384y384`}>
+                    {mainFeaturedPost.linkText}
+                  </Link>
                 </div>
               </div>
             </Box>
@@ -221,7 +223,7 @@ const Home = () => {
                       <Card
                         key={post?._id}
                         className="latest-news-card"
-                        onClick={() => history.push(`/${post?._id}`)}
+                        onClick={() => history.push(`/data/${post?._id}`)}
                       >
                         <CardActionArea>
                           <div className="latest-news-content">

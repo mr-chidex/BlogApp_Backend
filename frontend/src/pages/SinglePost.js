@@ -60,7 +60,6 @@ const SinglePost = () => {
 
         setPost(data?.post);
         setLoading(false);
-        console.log(data);
       } catch (error) {
         error.response && error.response.data.message
           ? dispatch(setSnackbar(error.response.data.message, "error"))

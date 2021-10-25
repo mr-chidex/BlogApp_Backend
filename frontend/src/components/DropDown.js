@@ -1,8 +1,5 @@
 import { IconButton, Menu, MenuItem } from "@material-ui/core";
 import React, { useState } from "react";
-// import Menu from "@material-ui/icons/Menu";
-// import MenuItem from "@mui/material/MenuItem";
-// import { IconButton } from "@mui/material";
 import { useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
 
@@ -23,7 +20,8 @@ export default function DropDown({ display }) {
 
   const logoutHandler = () => {
     setAnchorEl(null);
-    dispatch(userLogoutAction());
+    dispatch(userLogoutAction(history));
+    history.push("/signin");
   };
 
   return (
