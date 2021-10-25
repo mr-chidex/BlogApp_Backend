@@ -105,32 +105,44 @@ const SinglePost = () => {
               <div className="share-btns">
                 <ShareIcon fontSize="large" />
                 <FacebookShareButton
-                  url={`Hello, ${title}. Check out ${path} for full gist.`}
+                  url={`${
+                    post?.title || title
+                  }. Check out ${path} for full gist.`}
                 >
                   <FacebookIcon size={size} />
                 </FacebookShareButton>
                 <WhatsappShareButton
-                  url={`Hello, ${title}. Check out ${path} for full gist.`}
+                  url={`${
+                    post?.title || title
+                  }. Check out ${path} for full gist.`}
                 >
                   <WhatsappIcon size={size} />
                 </WhatsappShareButton>
                 <TwitterShareButton
-                  url={`Hello, ${title}. Check out ${path} for full gist.`}
+                  url={`${
+                    post?.title || title
+                  }. Check out ${path} for full gist.`}
                 >
                   <TwitterIcon size={size} />
                 </TwitterShareButton>
                 <EmailShareButton
-                  url={`Hello, ${title}. Check out ${path} for full gist.`}
+                  url={`${
+                    post?.title || title
+                  }. Check out ${path} for full gist.`}
                 >
                   <EmailIcon size={size} />
                 </EmailShareButton>
                 <LinkedinShareButton
-                  url={`Hello, ${title}. Check out ${path} for full gist.`}
+                  url={`${
+                    post?.title || title
+                  }. Check out ${path} for full gist.`}
                 >
                   <LinkedinIcon size={size} />
                 </LinkedinShareButton>
                 <TelegramShareButton
-                  url={`Hello, ${title}. Check out ${path} for full gist.`}
+                  url={`${
+                    post?.title || title
+                  }. Check out ${path} for full gist.`}
                 >
                   <TelegramIcon size={size} />
                 </TelegramShareButton>

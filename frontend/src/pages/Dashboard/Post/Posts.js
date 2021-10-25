@@ -133,7 +133,7 @@ const Posts = () => {
     (async () => {
       try {
         const { data } = await axios.get(
-          `${process.env.REACT_APP_BLOG_API}/api/posts?limit=${limit}&page=${page}`
+          `${process.env.REACT_APP_BLOG_API}/api/posts/author?limit=${limit}&page=${page}`
         );
 
         setPosts(data?.result?.data);
@@ -167,7 +167,7 @@ const Posts = () => {
           {posts?.length < 1 ? (
             <Box m={5}>
               <Typography variant="h5" align="center">
-                Sorry, there are currently no blog content
+                You currently have no blog content
               </Typography>
             </Box>
           ) : (

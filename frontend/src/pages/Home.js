@@ -6,9 +6,11 @@ import {
   CardMedia,
   Container,
   Grid,
+  IconButton,
 } from "@mui/material";
 import EventAvailableIcon from "@mui/icons-material/EventAvailable";
 import NotesIcon from "@mui/icons-material/Notes";
+import Search from "@material-ui/icons/Search";
 
 import axios from "axios";
 import { useDispatch } from "react-redux";
@@ -174,6 +176,18 @@ const Home = () => {
       <Container maxWidth="lg">
         <Grid container spacing={3}>
           <Grid item xs={12} md={8}>
+            <div className="search-bar">
+              <div className="form-control">
+                <input type="text" placeholder="Search anything" />
+                <IconButton
+                  aria-label="search"
+                  className="search-icon"
+                  color="inherit"
+                >
+                  <Search />
+                </IconButton>
+              </div>
+            </div>
             <Box
               sx={{
                 backgroundColor: "grey.800",
@@ -243,7 +257,15 @@ const Home = () => {
                                   ).toLocaleDateString()}
                                 </span>
                               </div>
-                              <p>{post?.content?.substring(0, 400)}...</p>
+
+                              <div
+                                dangerouslySetInnerHTML={{
+                                  __html: `${post?.content?.substring(
+                                    0,
+                                    400
+                                  )}...`,
+                                }}
+                              />
                             </div>
 
                             <div className="image-container">
@@ -284,7 +306,7 @@ const Home = () => {
                 ))}
               </div>
 
-              <PaginationTab />
+              <PaginationTab className="pagination" />
             </div>
           </Grid>
 

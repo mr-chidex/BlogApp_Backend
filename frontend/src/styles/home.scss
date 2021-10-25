@@ -1,4 +1,42 @@
 .home {
+  .search-bar {
+    background-color: $dark-primary;
+    margin-bottom: 0.8rem;
+    display: grid;
+    place-items: center;
+
+    @media (min-width: 891px) {
+      display: none;
+    }
+
+    .form-control {
+      position: relative;
+      width: 100%;
+      @media (min-width: 768px) {
+        width: 20rem;
+      }
+      input {
+        background-color: $secondary;
+        padding: 1rem 2rem;
+        clip-path: polygon(0 1%, 95% 0, 100% 100%, 5% 100%);
+        color: $dark;
+        width: 100%;
+        border: none;
+        outline: none;
+
+        &::placeholder {
+          color: $black;
+        }
+      }
+
+      .search-icon {
+        position: absolute;
+        top: 0;
+        right: 20px;
+        color: $dark_primary;
+      }
+    }
+  }
   .featured-news {
     position: relative;
 

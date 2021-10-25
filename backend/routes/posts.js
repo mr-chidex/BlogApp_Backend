@@ -20,7 +20,7 @@ router
   .route("/")
   .post(imageUpload.single("image"), authUser, postValidator, addNewPost);
 
-router.get("/author", getAllPostByAuthor);
+router.get("/author", authUser, getAllPostByAuthor);
 
 router
   .route("/:postId")
