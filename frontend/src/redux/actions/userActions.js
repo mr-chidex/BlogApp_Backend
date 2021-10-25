@@ -32,12 +32,13 @@ export const userSignupAction = (user, helpers) => async (dispatch) => {
     dispatch({
       type: SET_SNACKBAR,
       payload: {
-        snackBarMessage: "Signup successful",
+        snackBarMessage: "Sign up successful",
         snackBarType: "success",
       },
     });
 
     helpers.setSubmitting(false);
+    helpers.resetForm();
   } catch (error) {
     dispatch({
       type: USER_SIGNUP_FAILED,
@@ -63,8 +64,8 @@ export const userSignupAction = (user, helpers) => async (dispatch) => {
 };
 
 export const userLoginAction =
-  ({ email, password }) =>
-  async (dispatch, getState) => {
+  (values, helpers) => async (dispatch, getState) => {
+    const { email, password } = values;
     try {
       dispatch({ type: USER_LOGIN_REQUEST });
 
@@ -91,6 +92,19 @@ export const userLoginAction =
             ? error.response.data.message
             : error.message,
       });
+
+      dispatch({
+        type: SET_SNACKBAR,
+        payload: {
+          snackBarMessage:
+            error.response && error.response.data.message
+              ? error.response.data.message
+              : error.message,
+          snackBarType: "error",
+        },
+      });
+
+      helpers.setSubmitting(false);
     }
   };
 

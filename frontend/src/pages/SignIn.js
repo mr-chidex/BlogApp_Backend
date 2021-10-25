@@ -12,8 +12,10 @@ import { createTheme, ThemeProvider } from "@material-ui/core/styles";
 import { makeStyles } from "@material-ui/core";
 import { Formik, Form, Field } from "formik";
 import * as yup from "yup";
+import { useDispatch } from "react-redux";
 
 import Meta from "../components/Meta";
+import { userLoginAction } from "../redux/actions/userActions";
 
 const metaTags = {
   title: "DBlog - Sign in form",
@@ -51,6 +53,7 @@ const signinSchema = yup.object().shape({
 
 const SignIn = () => {
   const classes = useStyles();
+  const dispatch = useDispatch();
 
   const initialValues = {
     email: "",
@@ -62,8 +65,7 @@ const SignIn = () => {
   }, []);
 
   const signinHandler = (values, helpers) => {
-    console.log(values);
-    helpers.setSubmitting(false);
+    dispatch(userLoginAction(values, helpers));
   };
 
   return (
