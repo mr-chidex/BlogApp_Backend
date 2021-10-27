@@ -79,6 +79,7 @@ const EditPost = () => {
           const { data } = await axios.get(
             `${process.env.REACT_APP_BLOG_API}/api/posts/${params?.postId}`
           );
+          setContent(data?.post?.content);
           setPost(data?.post);
           setLoading(false);
         } catch (error) {
@@ -269,6 +270,7 @@ const EditPost = () => {
                         <ReactQuill
                           value={content}
                           onChange={handleContentChange}
+                          defaultValue={content}
                         />
                       </Box>
                     </Grid>
