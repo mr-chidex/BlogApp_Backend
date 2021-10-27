@@ -53,7 +53,7 @@ const ChangePassword = () => {
 
   const handleSubmit = async (values, helpers) => {
     try {
-      await axios.put(`${process.env.REACT_APP_BLOG_API}/api/password`, {
+      await axios.put(`${process.env.REACT_APP_BLOG_API}/api/users/password`, {
         password: values.password,
       });
       dispatch(setSnackbar("password successfully updated", "success"));

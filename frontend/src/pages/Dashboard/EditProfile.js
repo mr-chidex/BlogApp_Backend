@@ -62,9 +62,8 @@ const EditProfile = () => {
   };
 
   const handleSubmit = async (values, helpers) => {
-    await dispatch(updateProfileAction(values, image));
-    helpers.setSubmitting(false);
-    helpers.resetForm();
+    await dispatch(updateProfileAction(values, image, helpers));
+
     filesRemoveOne();
   };
 

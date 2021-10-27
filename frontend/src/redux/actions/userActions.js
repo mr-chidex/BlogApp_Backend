@@ -127,40 +127,46 @@ export const setAuthorizationHeader = (token) => {
   }
 };
 
-export const updateProfileAction = (values, image) => async (dispatch) => {
-  const formData = new FormData();
-  formData.append("name", values.name);
-  formData.append("email", values.email);
-  if (image[0]) {
-    formData.append("image", image[0]);
-  }
+export const updateProfileAction =
+  (values, image, helpers) => async (dispatch) => {
+    console.log(values);
+    const formData = new FormData();
+    formData.append("name", values.name);
+    formData.append("email", values.email);
+    if (image[0]) {
+      formData.append("image", image[0]);
+    }
 
-  try {
-    const { data } = await axios.put(
-      `${process.env.REACT_APP_BLOG_API}/api/users/profile`,
-      formData
-    );
-    dispatch({
-      type: SET_SNACKBAR,
-      payload: {
-        snackBarMessage:
-          "successfully updated profile, refresh page to see update",
-        snackBarType: "success",
-      },
-    });
+    try {
+      const { data } = await axios.put(
+        `${process.env.REACT_APP_BLOG_API}/api/users/profile`,
+        formData
+      );
+      dispatch({
+        type: SET_SNACKBAR,
+        payload: {
+          snackBarMessage:
+            "successfully updated profile, refresh page to see update",
+          snackBarType: "success",
+        },
+      });
 
-    setAuthorizationHeader(data.token);
-    localStorage.setItem("USER_TOKEN", data.token);
-  } catch (error) {
-    dispatch({
-      type: SET_SNACKBAR,
-      payload: {
-        snackBarMessage:
-          error.response && error.response.data.message
-            ? error.response.data.message
-            : error.message,
-        snackBarType: "error",
-      },
-    });
-  }
-};
+      setAuthorizationHeader(data.token);
+      localStorage.setItem("USER_TOKEN", data.token);
+      helpers.setSubmitting(false);
+      helpers.resetForm();
+    } catch (error) {
+      dispatch({
+        type: SET_SNACKBAR,
+        payload: {
+          snackBarMessage:
+            error.response && error.response.data.message
+              ? error.response.data.message
+              : error.message,
+          snackBarType: "error",
+        },
+      });
+
+      helpers.setSubmitting(false);
+    }
+  };
