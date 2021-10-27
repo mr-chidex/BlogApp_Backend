@@ -16,6 +16,7 @@ app.use(morgan("dev"));
 const postRouter = require("./routes/posts");
 const error = require("./controllers/error");
 const userRouter = require("./routes/user");
+const newsLetterRouter = require("./routes/newsLetter");
 
 app.get("/", (req, res) => {
   return res.json({
@@ -25,12 +26,14 @@ app.get("/", (req, res) => {
 });
 app.use("/api/posts", postRouter);
 app.use("/api/users", userRouter);
+app.use("/api/news-letter", newsLetterRouter);
 app.use(error);
 
 mongoose
   .connect(process.env.PROD_TEST_DB, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
+    useCreateIndex: true,
   })
   .then(async () => {
     console.log("db connected...");

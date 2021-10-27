@@ -1,6 +1,5 @@
 const mongoose = require("mongoose");
 const { Schema } = require("mongoose");
-const bcryptJs = require("bcryptjs");
 
 const newsLetterSchema = new Schema(
   {
@@ -8,3 +7,5 @@ const newsLetterSchema = new Schema(
   },
   { timestamps: true }
 );
+
+module.exports = mongoose.model("NewsLetter", newsLetterSchema);

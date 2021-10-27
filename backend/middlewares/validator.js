@@ -43,4 +43,17 @@ const userSignInValidator = [
     .normalizeEmail(),
 ];
 
-module.exports = { postValidator, userSignupValidator, userSignInValidator };
+const newsLetterVal = [
+  body("email")
+    .trim()
+    .isEmail()
+    .withMessage("Please enter a valid email")
+    .normalizeEmail(),
+];
+
+module.exports = {
+  postValidator,
+  userSignupValidator,
+  userSignInValidator,
+  newsLetterVal,
+};
