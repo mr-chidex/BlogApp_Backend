@@ -19,6 +19,9 @@ import EditPost from "./pages/Dashboard/Post/EditPost";
 import Posts from "./pages/Dashboard/Post/Posts";
 import Post from "./pages/Dashboard/Post/Post";
 import Subscribers from "./pages/Dashboard/Subscribers/Subscribers";
+import ChangePassword from "./pages/Dashboard/ChangePassword";
+import Profile from "./pages/Dashboard/Profile";
+import EditProfile from "./pages/Dashboard/EditProfile";
 
 const App = () => {
   const { isAuth, user } = useSelector((state) => state.userData);
@@ -52,9 +55,26 @@ const App = () => {
         <Route exact path="/signin" component={SignIn} />
         {isAuth && <Route exact path="/dashboard" component={Dashboard} />}
         {isAuth && <Route exact path="/dashboard/post" component={Posts} />}
-        {isAuth && (
+        {user?.admin && (
           <Route exact path="/dashboard/subscribers" component={Subscribers} />
         )}
+
+        {isAuth && (
+          <Route
+            exact
+            path="/dashboard/change-password"
+            component={ChangePassword}
+          />
+        )}
+
+        {isAuth && (
+          <Route exact path="/dashboard/profile" component={Profile} />
+        )}
+
+        {isAuth && (
+          <Route exact path="/dashboard/edit-profile" component={EditProfile} />
+        )}
+
         {isAuth && (
           <Route exact path="/dashboard/add-post" component={EditPost} />
         )}

@@ -32,13 +32,12 @@ import axios from "axios";
 
 // import { setSnackbar } from "../redux/actions/uiActions";
 import SideBar from "../components/SideBar";
-import Loader from "../components/Loader";
 
 const SinglePost = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [comment, setComment] = useState("");
-  const [loading, setLoading] = useState(false);
+  // const [loading, setLoading] = useState(false);
   const [post, setPost] = useState({});
   const size = 45;
   const path = window.location.href;
@@ -51,7 +50,7 @@ const SinglePost = () => {
   }, []);
 
   useEffect(() => {
-    setLoading(true);
+    // setLoading(true);
     (async () => {
       try {
         const { data } = await axios.get(
@@ -59,13 +58,13 @@ const SinglePost = () => {
         );
 
         setPost(data?.post);
-        setLoading(false);
+        // setLoading(false);
       } catch (error) {
         // error.response && error.response.data.message
         //   ? dispatch(setSnackbar(error.response.data.message, "error"))
         //   : dispatch(setSnackbar(error.message, "error"));
-
-        setLoading(false);
+        console.log(error);
+        // setLoading(false);
       }
     })();
   }, [params, dispatch]);

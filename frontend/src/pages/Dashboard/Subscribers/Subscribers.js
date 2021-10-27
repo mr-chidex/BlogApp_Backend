@@ -62,7 +62,7 @@ const Subscribers = () => {
     (async () => {
       try {
         const { data } = await axios.get(
-          `${process.env.REACT_APP_BLOG_API}/subscribers?limit=${limit}&offset=${page}`
+          `${process.env.REACT_APP_BLOG_API}/api/news-letter?limit=${limit}&offset=${page}`
         );
 
         setSubscribers(data?.result?.data);
@@ -83,12 +83,14 @@ const Subscribers = () => {
   };
 
   const deleteHandler = async (subId) => {
+    setSubscribers((prev) =>
+      prev.filter((subcriber) => subcriber._id !== subId)
+    );
     try {
       await axios.delete(
-        `${process.env.REACT_APP_BLOG_API}/subscribers/${subId}`
+        `${process.env.REACT_APP_BLOG_API}/api/news-letter/${subId}`
       );
       dispatch(setSnackbar("deleted successfully", "success"));
-      setSubscribers((prev) => prev.filter((cat) => cat._id !== subId));
       setTotalPage((prevPage) => prevPage - 1);
     } catch (error) {
       error.response && error.response.data.message

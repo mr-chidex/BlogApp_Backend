@@ -207,15 +207,17 @@ export default function DashboardNav({ children }) {
             </ListItemIcon>
             <ListItemText primary="All Post" />
           </ListItem>
-          <ListItem
-            button
-            onClick={() => history.push("/dashboard/subscribers")}
-          >
-            <ListItemIcon>
-              <NotificationsIcon />
-            </ListItemIcon>
-            <ListItemText primary="News Subscribers" />
-          </ListItem>
+          {user?.admin && (
+            <ListItem
+              button
+              onClick={() => history.push("/dashboard/subscribers")}
+            >
+              <ListItemIcon>
+                <NotificationsIcon />
+              </ListItemIcon>
+              <ListItemText primary="News Subscribers" />
+            </ListItem>
+          )}
           <Divider />
           <Accordion>
             <AccordionSummary
@@ -230,18 +232,21 @@ export default function DashboardNav({ children }) {
               </Box>
             </AccordionSummary>
             <AccordionDetails>
-              <ListItem button onClick={() => history.push("/admin/profile")}>
+              <ListItem
+                button
+                onClick={() => history.push("/dashboard/profile")}
+              >
                 <ListItemText primary="Profile" />
               </ListItem>
               <ListItem
                 button
-                onClick={() => history.push("/admin/change-password")}
+                onClick={() => history.push("/dashboard/change-password")}
               >
                 <ListItemText primary="Change Password" />
               </ListItem>
               <ListItem
                 button
-                onClick={() => history.push("/admin/edit-profile")}
+                onClick={() => history.push("/dashboard/edit-profile")}
               >
                 <ListItemText primary="Edit Profile" />
               </ListItem>
