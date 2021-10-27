@@ -1,7 +1,7 @@
 import React from "react";
 import { Container, makeStyles } from "@material-ui/core";
 import { NavLink } from "react-router-dom";
-import { IconButton, Avatar } from "@mui/material";
+import { IconButton, Box, Avatar } from "@mui/material";
 import { Facebook, Instagram, Twitter } from "@mui/icons-material";
 import { useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
@@ -35,6 +35,21 @@ const useStyles = makeStyles({
   },
   search: {
     padding: "12px",
+  },
+  imageContainer: {
+    width: 30,
+    height: 30,
+    margin: "1rem auto",
+    backgroundColor: "#fff",
+    borderRadius: 15,
+    border: "solid 1px #bbb",
+    display: "grid",
+    placeItems: "center",
+  },
+  image: {
+    width: "100%",
+    borderRadius: "50%",
+    margin: "1px",
   },
 });
 
@@ -82,14 +97,28 @@ const Header = () => {
                 signup
               </NavLink>
             )}
-
             {!isAuth && (
               <NavLink className={classes.links} to="/signin">
                 signin
               </NavLink>
             )}
-
-            {isAuth && <DropDown display={<Avatar title={user?.name} />} />}
+            {isAuth && (
+              <DropDown
+                display={
+                  user?.image?.url ? (
+                    <Box className={classes.imageContainer} title={user?.name}>
+                      <img
+                        className={classes.image}
+                        src={user?.image?.url}
+                        alt="profile"
+                      />
+                    </Box>
+                  ) : (
+                    <Avatar title={user?.name} />
+                  )
+                }
+              />
+            )}
           </div>
         </nav>
       </Container>

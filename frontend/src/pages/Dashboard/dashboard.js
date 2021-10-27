@@ -49,13 +49,13 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: "#fff",
     borderRadius: 15,
     border: "solid 1px #bbb",
-    padding: "1px",
     display: "grid",
     placeItems: "center",
   },
   image: {
     width: "100%",
     borderRadius: "50%",
+    margin: "1px",
   },
   root: { backgroundColor: "#182029", color: "#fff" },
 }));

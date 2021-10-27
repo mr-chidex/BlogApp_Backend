@@ -21,8 +21,6 @@ router.route("/signin").post(userSignInValidator, signIn);
 router
   .route("/profile")
   .put(imageUpload.single("image"), authUser, updateProfileVal, updateProfile);
-router.route("/password").put(passwordVal, changePassword);
-// router.route("/signin").post(signUp);
-// router.route("/signup").post(signUp);
+router.route("/password").put(authUser, passwordVal, changePassword);
 
 module.exports = router;

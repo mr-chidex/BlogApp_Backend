@@ -129,7 +129,6 @@ export const setAuthorizationHeader = (token) => {
 
 export const updateProfileAction =
   (values, image, helpers) => async (dispatch) => {
-    console.log(values);
     const formData = new FormData();
     formData.append("name", values.name);
     formData.append("email", values.email);
