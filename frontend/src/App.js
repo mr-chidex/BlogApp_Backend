@@ -52,7 +52,7 @@ const App = () => {
         <Route exact path="/signin" component={SignIn} />
         {isAuth && <Route exact path="/dashboard" component={Dashboard} />}
         {isAuth && <Route exact path="/dashboard/post" component={Posts} />}
-        {user?.admin && (
+        {isAuth && (
           <Route exact path="/dashboard/subscribers" component={Subscribers} />
         )}
         {isAuth && (

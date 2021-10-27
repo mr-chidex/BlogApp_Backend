@@ -42,7 +42,7 @@ const Header = () => {
   const classes = useStyles();
   const location = useLocation();
 
-  const { isAuth } = useSelector((state) => state.userData);
+  const { isAuth, user } = useSelector((state) => state.userData);
 
   if (location?.pathname?.split("/")[1] === "dashboard") return null;
 
@@ -89,7 +89,7 @@ const Header = () => {
               </NavLink>
             )}
 
-            {isAuth && <DropDown display={<Avatar />} />}
+            {isAuth && <DropDown display={<Avatar title={user?.name} />} />}
           </div>
         </nav>
       </Container>
