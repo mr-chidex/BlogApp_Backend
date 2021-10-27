@@ -30,7 +30,7 @@ const useStyles = makeStyles({
 });
 
 const Home = () => {
-  const [page, setPage] = useState(0);
+  const [page] = useState(0);
   const [posts, setPosts] = useState([]);
   const [totalPage, setTotalPage] = useState(1);
   const [countPerPage, setCountPerPage] = useState(1);
