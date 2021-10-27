@@ -262,7 +262,7 @@ const Home = () => {
                                 dangerouslySetInnerHTML={{
                                   __html: `${post?.content?.substring(
                                     0,
-                                    400
+                                    300
                                   )}...`,
                                 }}
                               />

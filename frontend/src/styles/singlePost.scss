@@ -39,6 +39,11 @@
 
   .content {
     margin: 1rem 0;
+
+    ul,
+    ol {
+      padding-left: 3rem;
+    }
   }
 
   .comments {
