@@ -11,6 +11,7 @@ const {
   updatePost,
   deletePost,
   getAllPostByAuthor,
+  searchPost,
 } = require("../controllers/posts");
 const imageUpload = require("../middlewares/multer");
 
@@ -21,6 +22,7 @@ router
   .post(imageUpload.single("image"), authUser, postValidator, addNewPost);
 
 router.get("/author", authUser, getAllPostByAuthor);
+router.get("/search", searchPost);
 
 router
   .route("/:postId")

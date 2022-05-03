@@ -27,6 +27,32 @@ const getAllPosts = async (req, res, next) => {
   res.json({ result });
 };
 
+const searchPost = async (req, res, next) => {
+  const { q } = req.query;
+  if (!q)
+    return res
+      .status(422)
+      .json({ messgae: "no query provided", status: "error" });
+
+  const page = +req.query.page || 0;
+  const limit = +req.query.limit || 10;
+  const totalCount = await Posts.find({
+    $text: { $search: q },
+  }).countDocuments();
+  const result = {};
+  const startIndex = page * limit;
+  result.totalCount = totalCount;
+  result.countPerPage = limit;
+
+  result.data = await Posts.find({ $text: { $search: q } })
+    .populate("author", "name -_id")
+    .skip(startIndex)
+    .limit(limit)
+    .sort({ _id: -1 });
+
+  res.json({ result });
+};
+
 //@desc     get all post by author
 //@Route    GET /api/posts/
 //@access   Public
@@ -70,7 +96,7 @@ const addNewPost = async (req, res, next) => {
       folder: folderPath,
     });
 
-    const post = await new Posts({
+    const post = new Posts({
       title,
       content,
       image: {
@@ -199,4 +225,5 @@ module.exports = {
   deletePost,
   updatePost,
   getAllPostByAuthor,
+  searchPost,
 };
