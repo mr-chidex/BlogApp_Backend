@@ -5,6 +5,7 @@ A mern stack blog application, designed with Node Js, Epress JS, React JS, Redux
 #### Backend Dev Server
 
 ```
+cd backend/
 yarn dev
 ```
 
@@ -14,7 +15,7 @@ yarn dev
 - Authentication and Authentication.
 
 ```
-cd frontend
+cd frontend/
 yarn start
 ```
 
@@ -35,6 +36,7 @@ Performs
 
 ```
 GET /api/posts
+GET /api/posts/search?q=text
 GET /api/posts/:postId
 POST /api/posts/:postId
 DELETE /api/posts/:postId
