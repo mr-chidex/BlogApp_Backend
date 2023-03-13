@@ -56,10 +56,10 @@ const Home = () => {
         setCountPerPage(data?.result?.countPerPage);
         setLoading(false);
       } catch (error) {
-        error.response && error.response.data.message
+       {/* error.response && error.response.data.message
           ? dispatch(setSnackbar(error.response.data.message, "error"))
           : dispatch(setSnackbar(error.message, "error"));
-
+        */}
         setLoading(false);
       }
     })();
