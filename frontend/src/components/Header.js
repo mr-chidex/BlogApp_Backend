@@ -65,6 +65,7 @@ const Header = () => {
     <div className={classes.header}>
       <Container maxWidth="xl">
         <nav className={classes.nav}>
+          {/*
           <div>
             <IconButton
               aria-label="search"
@@ -88,7 +89,7 @@ const Header = () => {
               <Instagram className={classes.facebook} />
             </IconButton>
           </div>
-
+          */}
           <Logo />
 
           <div className={classes.left}>
