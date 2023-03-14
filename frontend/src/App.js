@@ -92,7 +92,7 @@ const App = () => {
         <Route exact path="/:url/:postId" component={SinglePost} />
         <Redirect to="/" />
       </Switch>
-   
+      <Footer />
     </div>
   );
 };
