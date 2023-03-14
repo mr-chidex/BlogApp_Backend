@@ -11,7 +11,8 @@ const Footer = () => {
     <footer style={{
       height: "10rem",
       display: "grid",
-      placeItems: "center"
+      placeItems: "center",
+      background: "#111"
     }} className="footer">
        <div style={{ textAlign: "center" }}>
         All right reserved | Designed by @
