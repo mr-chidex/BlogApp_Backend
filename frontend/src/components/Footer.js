@@ -8,7 +8,11 @@ const Footer = () => {
   if (location?.pathname?.split("/")[1] === "dashboard") return null;
 
   return (
-    <footer className="footer">
+    <footer style={{
+      height: "10rem",
+      display: "grid",
+      placeItems: "center"
+    }} className="footer">
       <Container maxWidth="lg">Footer</Container>
     </footer>
   );
